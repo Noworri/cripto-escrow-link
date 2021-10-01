@@ -1,0 +1,97 @@
+<div id="profil-photo">
+    <div class="card">
+        <div class="profil">
+            <img src="assets\index.jpg" class="card-img-top" alt="...">
+        </div>
+        <div class="card-body">
+            <h3>Bitcoin Shop</h3>
+            <h6>@bitcoinshop</h6>
+            <h5 class="card-title">I sell bitcoin , USDT and Dogcoin choice your coin and let's transact</h5>
+        </div>
+    </div>
+</div>
+
+<div class="card" id="cripto-section" style="width: 30rem;">
+    <div class="cripto-data">
+        <div class="band">
+            <h4>#Crypto</h4>
+        </div>
+        <div class="card-body">
+            <div class="cripto">
+                <span><img src="assets\cripto\1200px-BTC_Logo.svg.png" alt=""></span>
+                <div class="text">
+                    <h3 class="cripto-title">Bitcoin</h3>
+                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
+                </div>
+            </div>
+            <div class="cripto">
+                <span><img src="assets\cripto\tether-usdt-logo.png" alt=""></span>
+                <div class="text">
+                    <h3>USDT</h3>
+                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
+                </div>
+            </div>
+            <div class="cripto">
+                <span><img src="assets\cripto\download (9).png" alt=""></span>
+                <div class="text">
+                    <h3>Ethereum</h3>
+                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
+                </div>
+            </div>
+            <div class="cripto">
+                <span><img src="assets\cripto\bitcoin-cash-circle.png" alt=""></span>
+                <div class="text">
+                    <h3>Bitcoin Cash</h3>
+                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+    <hr>
+    <div id="form">
+        <div class="container">
+            <div class="row">
+                <div class="col col-12  col-sm-12 col-md-6 ">
+                    <div class="mb-3">
+                        <label for="cripto" class="form-label">Select the crypto you're buying</label>
+                        <select [(ngModel)]="criptoSelected" class="form-select" (change)="onSelectCripto(criptoSelected)"
+                            aria-label="Default select example">
+                            <option  *ngFor="let selected of criptoName" [value]="selected.name">{{selected.name}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col col-12 col-sm-12 col-md-6">
+                    <label for="qty" class="form-label">How much are you buying</label>
+                    <div class="input-group col-6 mb-3">
+                        <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="">
+                        <span class="input-group-text" id="basic-addon2">$</span>
+                    </div>
+
+                </div>
+            </div>
+            <p class="notice">You're paying 625 GHC including escrow fee</p>
+
+            <div class="row">
+                <div class="mb-3 container">
+                    <label for="btc-adresse" class="form-label">Enter your {{ criptoWalletteName}} wallet address</label>
+                    <input type="email" class="form-control" id="btc-adresse" aria-describedby="emailHelp">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="information">
+        <h5>Important Notes</h5>
+        <div class="container">
+            <p>Enter your Bitcoin wallet address Enter your Bitcoin wallet address
+            </p>
+            <p> Enter your Bitcoin wallet addressEnter
+                your Bitcoin wallet addressEnter your Bitcoin wallet</p>
+        </div>
+    </div>
+    <div class="container" id="container">
+        <button type="button" class="btn btn-primary">Pay to Escrow</button>
+    </div>
+</div>
+<footer>
+    <p>Create your own crypto store or buy at a cheap rate on Noworri <a href="#"><span>Download here</span></a> </p>
+</footer>
