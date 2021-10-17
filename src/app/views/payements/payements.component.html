@@ -4,9 +4,9 @@
             <img src="assets\index.jpg" class="card-img-top" alt="...">
         </div>
         <div class="card-body">
-            <h3>Bitcoin Shop</h3>
-            <h6>@bitcoinshop</h6>
-            <h5 class="card-title">I sell bitcoin , USDT and Dogcoin choice your coin and let's transact</h5>
+            <h3>{{ vendorData.store_name}}</h3>
+            <h6>@cryptoshop</h6>
+            <h5 class="card-title">{{ vendorData.description}}</h5>
         </div>
     </div>
 </div>
@@ -17,32 +17,11 @@
             <h4>#Crypto</h4>
         </div>
         <div class="card-body">
-            <div class="cripto">
-                <span><img src="assets\cripto\1200px-BTC_Logo.svg.png" alt=""></span>
+            <div *ngFor="let post of vendorPosts" class="cripto">
+                <span><img src="{{ getCryptoIcon(post.crypto_type) }}" alt=""></span>
                 <div class="text">
-                    <h3 class="cripto-title">Bitcoin</h3>
-                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
-                </div>
-            </div>
-            <div class="cripto">
-                <span><img src="assets\cripto\tether-usdt-logo.png" alt=""></span>
-                <div class="text">
-                    <h3>USDT</h3>
-                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
-                </div>
-            </div>
-            <div class="cripto">
-                <span><img src="assets\cripto\download (9).png" alt=""></span>
-                <div class="text">
-                    <h3>Ethereum</h3>
-                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
-                </div>
-            </div>
-            <div class="cripto">
-                <span><img src="assets\cripto\bitcoin-cash-circle.png" alt=""></span>
-                <div class="text">
-                    <h3>Bitcoin Cash</h3>
-                    <h6>$2580 Available for sale <span>@ 6.25 rate</span></h6>
+                    <h3 class="cripto-title">{{ post.crypto_type }}</h3>
+                    <h6>${{post.amount }} Available for sale <span>@ {{post.rate}} rate</span></h6>
                 </div>
             </div>
         </div>
