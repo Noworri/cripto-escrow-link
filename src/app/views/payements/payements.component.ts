@@ -1,48 +1,76 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { Subject } from 'rxjs';
+import { map, switchMap, takeUntil } from 'rxjs/operators';
+import { VendorsService } from 'src/app/services/vendors.service';
 
 @Component({
   selector: 'app-payements',
   templateUrl: './payements.component.html',
-  styleUrls: ['./payements.component.scss']
+  styleUrls: ['./payements.component.scss'],
 })
 export class PayementsComponent implements OnInit {
-
   criptoName = [
     {
-      name: 'select the  cripto'
+      name: 'select the  cripto',
     },
     {
-      name: 'Bitcoin'
+      name: 'Bitcoin',
     },
     {
-      name: 'USDT'
+      name: 'USDT',
     },
     {
-      name: 'Ethereum'
+      name: 'Ethereum',
     },
     {
-      name: 'Bitcoin Cash'
-    }
-  ]
+      name: 'Bitcoin Cash',
+    },
+  ];
 
+  unsubscribeAll$ = new Subject();
 
-  criptoSelected: any = this.criptoName[0].name
+  criptoSelected: any = this.criptoName[0].name;
 
-  criptoWalletteName = 'cripto'
+  criptoWalletteName = 'cripto';
+  username: string | null = '';
+  vendorID: any;
+  vendorData: any;
 
-  constructor() { }
+  constructor(
+    private route: ActivatedRoute,
+    private formBuilder: FormBuilder,
+    private vendorService: VendorsService
+  ) {
+  
+  }
 
   ngOnInit(): void {
+    this.getUrlParams(window.location.href);
+  }
 
+  getVendorDetails(vendorID: any) {
+    this.vendorService
+      .getVendorDetails(vendorID)
+      .pipe(takeUntil(this.unsubscribeAll$))
+      .subscribe((response: any) => {
+        this.vendorData = response['data'];
+        return this.vendorData
+      });
+  }
+
+  getUrlParams(url: string) {
+    const params = new URL(url).searchParams;
+    this.vendorID = params.get('id');
+    this.getVendorDetails(this.vendorID);
   }
 
   onSelectCripto(criptoSelected: any) {
     if (this.criptoSelected == 'select the  cripto') {
-      this.criptoWalletteName = 'cripto'
+      this.criptoWalletteName = 'cripto';
     } else {
-      this.criptoWalletteName = criptoSelected
+      this.criptoWalletteName = criptoSelected;
     }
   }
-
-
 }
