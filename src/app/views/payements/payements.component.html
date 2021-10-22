@@ -1,76 +1,131 @@
 <div id="profil-photo">
-    <div class="card">
-        <div class="profil">
-            <img src="assets\index.jpg" class="card-img-top" alt="...">
-        </div>
-        <div class="card-body">
-            <h3>{{ vendorData.store_name}}</h3>
-            <h6>@cryptoshop</h6>
-            <h5 class="card-title">{{ vendorData.description}}</h5>
-        </div>
+  <div class="card">
+    <div class="profil">
+      <img src="assets\index.jpg" class="card-img-top" alt="..." />
     </div>
+    <div class="card-body">
+      <h3>{{ vendorData?.store_name }}</h3>
+      <h6>@cryptoshop</h6>
+      <h5 class="card-title">{{ vendorData?.description }}</h5>
+    </div>
+  </div>
 </div>
 
-<div class="card" id="cripto-section" style="width: 30rem;">
-    <div class="cripto-data">
-        <div class="band">
-            <h4>#Crypto</h4>
+<div class="card" id="cripto-section" style="width: 30rem">
+  <div class="cripto-data">
+    <div class="band">
+      <h4>#Crypto</h4>
+    </div>
+    <div class="card-body">
+      <div *ngFor="let post of vendorPosts" class="cripto">
+        <span><img src="{{ getCryptoIcon(post?.crypto_type) }}" alt="" /></span>
+        <div class="text">
+          <h3 class="cripto-title">{{ post?.crypto_type }}</h3>
+          <h6>
+            ${{ post.amount }} Available for sale
+            <span>@ {{ post?.rate }} rate</span>
+          </h6>
         </div>
-        <div class="card-body">
-            <div *ngFor="let post of vendorPosts" class="cripto">
-                <span><img src="{{ getCryptoIcon(post.crypto_type) }}" alt=""></span>
-                <div class="text">
-                    <h3 class="cripto-title">{{ post.crypto_type }}</h3>
-                    <h6>${{post.amount }} Available for sale <span>@ {{post.rate}} rate</span></h6>
-                </div>
+      </div>
+    </div>
+  </div>
+  <hr />
+  <div id="form">
+    <form [formGroup]="form">
+      <div class="container">
+        <div class="row">
+          <div class="col col-12 col-sm-12 col-md-6">
+            <div class="mb-3">
+              <label for="cripto" class="form-label"
+                >Select the crypto you're buying</label
+              >
+              <select
+                formControlName="crypto_type"
+                class="form-select"
+                aria-label="Default select example"
+              >
+                <option
+                  *ngFor="let selected of criptoTypes"
+                  [value]="selected.name"
+                >
+                  {{ selected.name }}
+                </option>
+              </select>
             </div>
-        </div>
-    </div>
-    <hr>
-    <div id="form">
-        <div class="container">
-            <div class="row">
-                <div class="col col-12  col-sm-12 col-md-6 ">
-                    <div class="mb-3">
-                        <label for="cripto" class="form-label">Select the crypto you're buying</label>
-                        <select [(ngModel)]="criptoSelected" class="form-select" (change)="onSelectCripto(criptoSelected)"
-                            aria-label="Default select example">
-                            <option  *ngFor="let selected of criptoName" [value]="selected.name">{{selected.name}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col col-12 col-sm-12 col-md-6">
-                    <label for="qty" class="form-label">How much are you buying</label>
-                    <div class="input-group col-6 mb-3">
-                        <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="">
-                        <span class="input-group-text" id="basic-addon2">$</span>
-                    </div>
-
-                </div>
+          </div>
+          <div class="col col-12 col-sm-12 col-md-6">
+            <label for="qty" class="form-label">How much are you buying</label>
+            <div class="input-group col-6 mb-3">
+              <input
+                type="text"
+                class="form-control"
+                placeholder=""
+                aria-label=""
+                aria-describedby=""
+                formControlName="amount"
+              />
+              <span class="input-group-text" id="basic-addon2">$</span>
             </div>
-            <p class="notice">You're paying 625 GHC including escrow fee</p>
-
-            <div class="row">
-                <div class="mb-3 container">
-                    <label for="btc-adresse" class="form-label">Enter your {{ criptoWalletteName}} wallet address</label>
-                    <input type="email" class="form-control" id="btc-adresse" aria-describedby="emailHelp">
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-    <div id="information">
-        <h5>Important Notes</h5>
-        <div class="container">
-            <p>Enter your Bitcoin wallet address Enter your Bitcoin wallet address
-            </p>
-            <p> Enter your Bitcoin wallet addressEnter
-                your Bitcoin wallet addressEnter your Bitcoin wallet</p>
+        <div class="row">
+          <div class="mb-3 container">
+            <label for="btc-adresse" class="form-label"
+              >Enter Seller's rate</label
+            >
+            <input
+              type="text"
+              class="form-control"
+              id="btc-adresse"
+              aria-describedby="emailHelp"
+              formControlName="rate"
+              [ngModel]="rate" (ngModelChange)="getAmount($event)"
+            />
+          </div>
         </div>
+        <p class="notice">You're paying {{(netPayable |  number : '1.2-2')  || 0}} GHC including escrow fee</p>
+        <div class="row">
+          <div class="mb-3 container">
+            <label for="btc-adresse" class="form-label"
+              >Enter your {{ criptoWalletteName }} wallet address</label
+            >
+            <input
+              type="email"
+              class="form-control"
+              id="btc-adresse"
+              aria-describedby="emailHelp"
+              formControlName="crypto_wallet"
+            />
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  <div id="information">
+    <h5>Important Notes</h5>
+    <div class="container">
+      <p>Enter your Bitcoin wallet address Enter your Bitcoin wallet address</p>
+      <p>
+        Enter your Bitcoin wallet addressEnter your Bitcoin wallet addressEnter
+        your Bitcoin wallet
+      </p>
     </div>
-    <div class="container" id="container">
-        <button type="button" class="btn btn-primary">Pay to Escrow</button>
-    </div>
+  </div>
+  <div class="container" id="container">
+    <button type="submit" (click)="setPaymentData()" class="btn btn-primary">
+      Pay to Escrow
+    </button>
+  </div>
+  <div *ngIf="hasError" class="alert alert-danger" role="alert">
+    {{errorMessage}}
+  </div>
 </div>
 <footer>
-    <p>Create your own crypto store or buy at a cheap rate on Noworri <a href="#"><span>Download here</span></a> </p>
+  <p>
+    Create your own crypto store or buy at a cheap rate on Noworri
+    <a
+      href="https://play.google.com/store/apps/details?id=co.noworri.noworri&hl=fr&gl=US"
+      ><span>Download here</span></a
+    >
+  </p>
 </footer>
