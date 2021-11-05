@@ -1,27 +1,53 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { CreateAccountComponent } from './views/checkout/create-account/create-account.component';
+import { PayComponent } from './views/checkout/pay/pay.component';
+import { PhonenumberComponent } from './views/checkout/phonenumber/phonenumber.component';
+import { VerifyComponent } from './views/checkout/verify/verify.component';
 import { PayementsComponent } from './views/payements/payements.component';
 
 const routes: Routes = [
-
   {
-    path: "",
-    redirectTo: "/vendor",
-    pathMatch: "full",
+    path: '',
+    redirectTo: '/vendor',
+    pathMatch: 'full',
   },
   {
-    path: "",
+    path: '',
     children: [
       {
-        path: "vendor",
-        component: PayementsComponent
+        path: 'vendor',
+        component: PayementsComponent,
       },
-    ]
-  }
+    ],
+  },
+  {
+    path: 'checkout',
+    // children: [
+    //   {
+    //     path: 'phonenumber',
+    //     component: PhonenumberComponent,
+    //   },
+    //   {
+    //     path: 'verify',
+    //     component: VerifyComponent,
+    //   },
+    //   {
+    //     path: 'pay',
+    //     component: PayComponent,
+    //   },
+    //   {
+    //     path: 'create',
+    //     component: CreateAccountComponent,
+    //   },
+    // ],
+    loadChildren: () =>
+      import('./views/checkout/checkout.module').then((m) => m.CheckoutModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
