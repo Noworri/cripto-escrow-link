@@ -7,32 +7,47 @@ import { VerifyComponent } from './views/checkout/verify/verify.component';
 import { PayementsComponent } from './views/payements/payements.component';
 
 const routes: Routes = [
-
   {
-    path: "",
-    redirectTo: "/vendor",
-    pathMatch: "full",
+    path: '',
+    redirectTo: '/vendor',
+    pathMatch: 'full',
   },
   {
-    path: "",
+    path: '',
     children: [
       {
-        path: "vendor",
-        component: PayementsComponent
+        path: 'vendor',
+        component: PayementsComponent,
       },
-    ]
+    ],
   },
   {
-    path: "checkout",
+    path: 'checkout',
+    // children: [
+    //   {
+    //     path: 'phonenumber',
+    //     component: PhonenumberComponent,
+    //   },
+    //   {
+    //     path: 'verify',
+    //     component: VerifyComponent,
+    //   },
+    //   {
+    //     path: 'pay',
+    //     component: PayComponent,
+    //   },
+    //   {
+    //     path: 'create',
+    //     component: CreateAccountComponent,
+    //   },
+    // ],
     loadChildren: () =>
-      import("./views/checkout/checkout.module").then(
-        (m) => m.CheckoutModule
-      ),
-  }
+      import('./views/checkout/checkout.module').then((m) => m.CheckoutModule),
+  },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

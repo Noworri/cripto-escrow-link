@@ -6,6 +6,7 @@ import { map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { Vendor } from 'src/app/models/vendors.model';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { VendorsService } from 'src/app/services/vendors.service';
+import { LOCAL_STORAGE_ORDER_DATA } from '../checkout/phonenumber/phonenumber.component';
 
 @Component({
   selector: 'app-payements',
@@ -40,7 +41,7 @@ export class PayementsComponent implements OnInit {
   vendorID: any;
   vendorData: any;
   vendorPosts: any;
-  form: any;
+  form!: FormGroup;
   buyerDetails: any;
   hasError: boolean = false;
   errorMessage: string = '';
@@ -151,18 +152,20 @@ export class PayementsComponent implements OnInit {
       buyer_wallet: this.form.value.crypto_wallet,
       requirement: 'Crypto Currency Transaction',
       currency: 'GHS',
-      callback_url: this.router.url,
-      cancel_url: this.router.url,
+      callback_url: window.location.href,
+      cancel_url: window.location.href,
     };
 
     this.processPayment(data);
   }
 
   processPayment(data: any) {
-    this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
-      if(response.checkout_url) {
-        window.location = response.checkout_url;
-      }
-    })
+    localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
+    this.router.navigate(['/checkout/phonenumber']);
+    // this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
+    //   if(response.checkout_url) {
+    //     window.location = response.checkout_url;
+    //   }
+    // })
   }
 }

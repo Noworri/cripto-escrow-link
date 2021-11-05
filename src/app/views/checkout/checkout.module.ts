@@ -15,7 +15,7 @@ import { NgOtpInputModule } from 'ng-otp-input';
 import { NgxFlagsModule } from 'ngx-flags';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { CheckoutRoutingModule } from './checkout.routing';
+import { CheckoutRoutingModule } from './checkout-routing.module';
 
 @NgModule({
   imports: [
