@@ -36,66 +36,35 @@
         <div class="row">
           <div class="col col-12 col-sm-12 col-md-6">
             <div class="mb-3">
-              <label for="cripto" class="form-label"
-                >Select the crypto you're buying</label
-              >
-              <select
-                formControlName="crypto_type"
-                class="form-select"
-                aria-label="Default select example"
-              >
-                <option
-                  *ngFor="let selected of criptoTypes"
-                  [value]="selected.name"
-                >
-                  {{ selected.name }}
-                </option>
+              <label for="cripto" class="form-label ">Select the crypto you're buying</label>
+              <select  [ngClass]='formValidationStatus.crypto_type' formControlName="crypto_type" [(ngModel)]="criptoSelected" 
+                (change)="onSelectCripto(criptoSelected)" aria-label="Default select example">
+                <option *ngFor="let selected of  criptoTypes" [value]="selected.name">{{selected.name}}</option>
               </select>
             </div>
           </div>
           <div class="col col-12 col-sm-12 col-md-6">
             <label for="qty" class="form-label">How much are you buying</label>
-            <div class="input-group col-6 mb-3">
-              <input
-                type="text"
-                class="form-control"
-                placeholder=""
-                aria-label=""
-                aria-describedby=""
-                formControlName="amount"
-              />
+            <div class="mb-3 input-group col-6">
+              <input type="text" [ngClass]='formValidationStatus.amount' class=" price" placeholder="" aria-label="" aria-describedby=""
+                formControlName="amount" />
               <span class="input-group-text" id="basic-addon2">$</span>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="mb-3 container">
-            <label for="btc-adresse" class="form-label"
-              >Enter Seller's rate</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              id="btc-adresse"
-              aria-describedby="emailHelp"
-              formControlName="rate"
-              [ngModel]="rate" (ngModelChange)="getAmount($event)"
-            />
+          <div class="container mb-3">
+            <label for="btc-adresse" class="form-label">Enter Seller's rate</label>
+            <input type="text" [ngClass]='formValidationStatus.rate'  id="btc-adresse" aria-describedby="emailHelp" formControlName="rate"
+              [ngModel]="rate" (ngModelChange)="getAmount($event)" />
           </div>
         </div>
-        <p class="notice">You're paying {{(netPayable |  number : '1.2-2')  || 0}} GHC including escrow fee</p>
+        <p class="notice">You're paying {{(netPayable | number : '1.2-2') || 0}} GHC including escrow fee</p>
         <div class="row">
-          <div class="mb-3 container">
-            <label for="btc-adresse" class="form-label"
-              >Enter your {{ criptoWalletteName }} wallet address</label
-            >
-            <input
-              type="email"
-              class="form-control"
-              id="btc-adresse"
-              aria-describedby="emailHelp"
-              formControlName="crypto_wallet"
-            />
+          <div class="container mb-3">
+            <label for="btc-adresse" class="form-label">Enter your {{ criptoWalletteName }} wallet address</label>
+            <input type="email" [ngClass]='formValidationStatus.crypto_wallet'   id="btc-adresse" aria-describedby="emailHelp"
+              formControlName="crypto_wallet" />
           </div>
         </div>
       </div>
@@ -123,9 +92,7 @@
 <footer>
   <p>
     Create your own crypto store or buy at a cheap rate on Noworri
-    <a
-      href="https://play.google.com/store/apps/details?id=co.noworri.noworri&hl=fr&gl=US"
-      ><span>Download here</span></a
-    >
+    <a href="https://play.google.com/store/apps/details?id=co.noworri.noworri&hl=fr&gl=US"><span>Download
+        here</span></a>
   </p>
 </footer>

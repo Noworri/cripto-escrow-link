@@ -5,6 +5,8 @@ import { PayComponent } from './views/checkout/pay/pay.component';
 import { PhonenumberComponent } from './views/checkout/phonenumber/phonenumber.component';
 import { VerifyComponent } from './views/checkout/verify/verify.component';
 import { PayementsComponent } from './views/payements/payements.component';
+import { of } from 'rxjs'
+import { delay } from 'rxjs/operators';
 
 const routes: Routes = [
   {
@@ -13,12 +15,19 @@ const routes: Routes = [
     pathMatch: 'full',
   },
   {
-    path: '',
+    path: 'vendor',
     children: [
       {
-        path: 'vendor',
+        path: 'payement',
         component: PayementsComponent,
+        resolve:{
+          load:'loading'
+        }
       },
+      {
+        path:'checkout/phonenumber',
+        component:PhonenumberComponent
+      }
     ],
   },
   {
@@ -49,5 +58,9 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
+  // providers: [{
+  //   provide: 'loading',
+  //   useValue: () => of(true).pipe(delay(1000))
+  // }],
 })
 export class AppRoutingModule {}

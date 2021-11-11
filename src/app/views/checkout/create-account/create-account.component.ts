@@ -18,5 +18,6 @@ export class CreateAccountComponent implements OnInit {
   getBusinessName() {
     let businessData = JSON.parse(localStorage.getItem(business_data) || '');
     this.businessName = businessData.trading_name;
+ 
   }
 }

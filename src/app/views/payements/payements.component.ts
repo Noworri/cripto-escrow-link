@@ -8,6 +8,11 @@ import { TransactionService } from 'src/app/services/transaction.service';
 import { VendorsService } from 'src/app/services/vendors.service';
 import { LOCAL_STORAGE_ORDER_DATA } from '../checkout/phonenumber/phonenumber.component';
 
+
+
+
+ const LOCAL_STORAGE_KEY_VENDOR_DATA= 'vendor-data';
+
 @Component({
   selector: 'app-payements',
   templateUrl: './payements.component.html',
@@ -16,7 +21,7 @@ import { LOCAL_STORAGE_ORDER_DATA } from '../checkout/phonenumber/phonenumber.co
 export class PayementsComponent implements OnInit {
   criptoTypes = [
     {
-      name: 'select the  cripto',
+      name: 'Select the  crypto',
     },
     {
       name: 'Bitcoin',
@@ -32,11 +37,21 @@ export class PayementsComponent implements OnInit {
     },
   ];
 
+
+  formValidationStatus = {
+    crypto_type: 'form-select',
+    amount: 'form-control ',
+    crypto_wallet: 'form-control',
+    rate: 'form-control'
+  }
+
+
+
   unsubscribeAll$ = new Subject();
 
   criptoSelected: any = this.criptoTypes[0].name;
 
-  criptoWalletteName = 'cripto';
+  criptoWalletteName = 'crypto';
   username: string | null = '';
   vendorID: any;
   vendorData: any;
@@ -48,16 +63,31 @@ export class PayementsComponent implements OnInit {
   rate: any;
   netPayable: number = 0;
 
+
   constructor(
     private route: ActivatedRoute,
     private formBuilder: FormBuilder,
     private vendorService: VendorsService,
     private router: Router,
-    private transactionService: TransactionService
-  ) {}
+    private transactionService: TransactionService,
+    private activatedRoute: ActivatedRoute,
+  ) { }
 
   ngOnInit(): void {
-    this.getUrlParams(window.location.href);
+    // this.getUrlParams(window.location.href);
+    this.getVendorUrlParams();
+  }
+
+  getVendorUrlParams() {
+    this.activatedRoute.queryParams.subscribe(params => {
+      this.vendorID = params
+      setTimeout(() => {
+        this.getVendorDetails(this.vendorID['id']);
+      }, 1000)
+    })
+  }
+
+  ngAfterContentInit() {
     this.form = this.formBuilder.group({
       crypto_type: [this.criptoTypes[0].name, Validators.required],
       amount: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
@@ -67,7 +97,7 @@ export class PayementsComponent implements OnInit {
   }
 
   getAmountInGHS(amount: any, rate: any) {
-    const newAmount =  amount * rate;
+    const newAmount = amount * rate;
     return newAmount;
   }
 
@@ -77,11 +107,11 @@ export class PayementsComponent implements OnInit {
 
   validatePhoneNumber(value: any) {
     this.vendorService.getBuyerDetails(value).pipe(take(1)).subscribe(resp => {
-      if(resp) {
+      if (resp) {
         this.buyerDetails = resp;
         this.setPaymentData();
       } else {
-        this.hasError = true;                               
+        this.hasError = true;
         this.errorMessage = "Your phone number is not yet registered on noworri";
       }
     })
@@ -93,11 +123,23 @@ export class PayementsComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribeAll$))
       .subscribe((response: any) => {
         const vendor: Vendor = response['data'];
-        this.vendorData = vendor;
-        this.vendorPosts = vendor.posts;
-        return this.vendorData;
+        localStorage.setItem(LOCAL_STORAGE_KEY_VENDOR_DATA,JSON.stringify(vendor));
+        this.displayVendorData();
+
+        // this.vendorData = vendor;
+        // this.vendorPosts = vendor.posts;
+        // return this.vendorData;
       });
   }
+
+
+  displayVendorData(){
+     this.vendorData=JSON.parse(localStorage.getItem('vendor-data') || '{}')
+     this.vendorPosts = this.vendorData.posts;
+  }
+
+
+
 
   getCryptoIcon(crypto_type: string) {
     const baseRoute: string = 'assetscripto\\';
@@ -115,14 +157,14 @@ export class PayementsComponent implements OnInit {
     }
   }
 
-  getUrlParams(url: string) {
-    const params = new URL(url).searchParams;
-    this.vendorID = params.get('id');
-    this.getVendorDetails(this.vendorID);
-  }
+  // getUrlParams(url: string) {
+  //   const params = new URL(url).searchParams;
+  //   this.vendorID = params.get('id');
+  //   this.getVendorDetails(this.vendorID);
+
+  // }
 
   onSelectCripto(criptoSelected: any) {
-    console.log('[criptoSelected]', criptoSelected);
     if (this.criptoSelected == 'select the  cripto') {
       this.criptoWalletteName = 'cripto';
     } else {
@@ -134,38 +176,55 @@ export class PayementsComponent implements OnInit {
     this.validatePhoneNumber(this.form.value.phone_number);
   }
   setPaymentData() {
-    const amount = this.getAmountInGHS(this.form.value.amount, this.form.value.rate);
-    const data = {
-      user_id: this.vendorData.user_id,
-      items: [
-        {
-          item_id: `cryptoshop-${this.vendorData.user_id}`,
-          items_qty: '1',
-          name: this.form.value.crypto_type,
-          price: amount,
-          description: 'Crypto Currency Transaction',
-        },
-      ],
-      transaction_type: 'cryptocurrency',
-      transaction_source: 'vendor',
-      delivery_phone: this.vendorData?.user.mobile_phone,
-      buyer_wallet: this.form.value.crypto_wallet,
-      requirement: 'Crypto Currency Transaction',
-      currency: 'GHS',
-      callback_url: window.location.href,
-      cancel_url: window.location.href,
-    };
-
-    this.processPayment(data);
+    // const amount = this.getAmountInGHS(this.form.value.amount, this.form.value.rate);
+    // const data = {
+    //   user_id: this.vendorData.user_id,
+    //   items: [
+    //     {
+    //       item_id: `cryptoshop-${this.vendorData.user_id}`,
+    //       items_qty: '1',
+    //       name: this.form.value.crypto_type,
+    //       price: amount,
+    //       description: 'Crypto Currency Transaction',
+    //     },
+    //   ],
+    //   transaction_type: 'cryptocurrency',
+    //   transaction_source: 'vendor',
+    //   delivery_phone: this.vendorData?.user.mobile_phone,
+    //   buyer_wallet: this.form.value.crypto_wallet,
+    //   requirement: 'Crypto Currency Transaction',
+    //   currency: 'GHS',
+    //   callback_url: window.location.href,
+    //   cancel_url: window.location.href,
+    // };
+    this.processPayment();
   }
 
-  processPayment(data: any) {
-    localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
-    this.router.navigate(['/checkout/phonenumber']);
+  processPayment() {
+    // console.log('yes')
+    // this.formValidationStatus.crypto_type = this.form.value.crypto_type === 'Select the  crypto' ?
+    //   'form-select is-invalid' : 'form-select is-valid';
+    // this.formValidationStatus.amount = this.form.value.amount === '' ?
+    //   'form-control is-invalid' : 'form-control is-valid';
+    // this.formValidationStatus.crypto_wallet = this.form.value.crypto_wallet === '' ?
+    //   'form-control is-invalid' : 'form-control is-valid';
+    // this.formValidationStatus.rate = this.form.value.rate === '' || undefined ?
+    //   'form-control is-invalid' : 'form-control is-valid';
+
+    // if (this.formValidationStatus.amount
+    //   == 'form-control is-valid' && this.formValidationStatus.crypto_type
+    //   == 'form-select is-valid' && this.formValidationStatus.crypto_wallet
+    //   == 'form-control is-valid' && this.formValidationStatus.rate
+    //   == 'form-control is-valid') {
+    //   localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
+      this.router.navigate(['/checkout/phonenumber']);
+
+    }
     // this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
     //   if(response.checkout_url) {
     //     window.location = response.checkout_url;
     //   }
     // })
+
   }
-}
+

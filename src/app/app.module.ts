@@ -39,7 +39,8 @@ import { CheckoutModule } from './views/checkout/checkout.module';
     // MatIconModule,
     // NgOtpInputModule,
     // NgxUiLoaderModule,
-    CheckoutModule
+    CheckoutModule,
+   
   ],
   providers: [],
   bootstrap: [AppComponent]

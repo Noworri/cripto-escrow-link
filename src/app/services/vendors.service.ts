@@ -12,7 +12,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root',
 })
 export class VendorsService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   payStackPayment(paymentData: any, credentials: string) {
     const url = environment.generateCheckoutUrl;
@@ -71,9 +71,10 @@ export class VendorsService {
 
   getVendorDetails(id: any) {
     const url = `https://api.noworri.com/api/cryptovendor/${id}`;
-    // let header = new HttpHeaders();
+    let header = new HttpHeaders();
     // header = header.append('Authorization', credentials);
-    return this.http.get(url, id).pipe(
+    header.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url,{ headers: header }).pipe(
       map((response) => {
         return response;
       }),
