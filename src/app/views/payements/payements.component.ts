@@ -62,6 +62,7 @@ export class PayementsComponent implements OnInit {
   errorMessage: string = '';
   rate: any;
   netPayable: number = 0;
+  cryptoData: any[] = [];
 
 
   constructor(
@@ -76,6 +77,7 @@ export class PayementsComponent implements OnInit {
   ngOnInit(): void {
     // this.getUrlParams(window.location.href);
     this.getVendorUrlParams();
+    this.getCryptoDetails();
   }
 
   getVendorUrlParams() {
@@ -132,10 +134,29 @@ export class PayementsComponent implements OnInit {
       });
   }
 
+  getCryptoDetails() {
+    this.vendorService
+      .getCryptoDetails()
+      .pipe(takeUntil(this.unsubscribeAll$))
+      .subscribe((response: any) => {
+        this.cryptoData = response['data'];
+        console.log('[cryptoData]', this.cryptoData)
+      });
+  }
+
 
   displayVendorData(){
      this.vendorData=JSON.parse(localStorage.getItem('vendor-data') || '{}')
-     this.vendorPosts = this.vendorData.posts;
+     const posts = this.vendorData.posts;
+     this.vendorPosts = posts.map((post: any) => {
+       post.image_url = this.getCryptoURL(post.crypto_type);
+       return post;
+     });
+  }
+
+  getCryptoURL(name: string) {
+    const cryptoData = this.cryptoData?.find((crypto: any) => crypto.name === name);
+    return cryptoData?.image_url;
   }
 
 
