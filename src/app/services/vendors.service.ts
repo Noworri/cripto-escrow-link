@@ -85,6 +85,23 @@ export class VendorsService {
     );
   }
 
+  getCryptoDetails() {
+    // const url = `https://api.noworri.com/api/getcryptodata`;
+    const url = `http://localhost:8000/api/getcryptodata`;
+    let header = new HttpHeaders();
+    // header = header.append('Authorization', credentials);
+    header.append('Access-Control-Allow-Origin', '*');
+    return this.http.get(url,{ headers: header }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log('Error: ', error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
   getBuyerDetails(phoneNumber: any) {
     const url = environment.getuserbyphone;
     // let header = new HttpHeaders();

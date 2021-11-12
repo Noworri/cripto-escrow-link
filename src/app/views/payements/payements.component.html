@@ -18,7 +18,7 @@
     </div>
     <div class="card-body">
       <div *ngFor="let post of vendorPosts" class="cripto">
-        <span><img src="{{ getCryptoIcon(post?.crypto_type) }}" alt="" /></span>
+        <span><img src="{{ post?.image_url }}" alt="" /></span>
         <div class="text">
           <h3 class="cripto-title">{{ post?.crypto_type }}</h3>
           <h6>
