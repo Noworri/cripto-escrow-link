@@ -4,7 +4,7 @@
     margin-top: 40px;
 
     .card {
-        max-width: 18rem;
+        max-width: 30rem;
         background-color: #f1f6ff;
         .profil {
             display: flex;
@@ -98,6 +98,10 @@ hr {
         font-size: small;
         font-weight: 600;
     }
+    .priceForms{
+       
+     
+    }
     .notice {
         letter-spacing: 0px;
         color: #ff0045;
@@ -149,6 +153,46 @@ footer {
         span {
             color: #ff3400;
         }
+    }
+
+    .container{
+        display: flex;
+        justify-content: center;
+       .btn1{
+           background-color: #9C2CFA;
+           font-size: medium;
+           font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+           text-align: center;
+           border-radius: 10px;
+           img{
+               width: 2rem;
+               position: relative;
+               top: 8px;
+           }
+           span{
+               font-weight: 800;
+           }
+       }
+       .btn2{
+        background-color:white;
+        font-size: medium;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        text-align: center;
+        color: black;
+        border-radius: 10px;
+        border: 0;
+        text-align: center;
+        img{
+            width: 2rem;
+            position: relative;
+            top: 8px;
+            right: 5px;
+        }
+        span{
+            font-weight: 800;
+        }
+    }
+
     }
 }
 

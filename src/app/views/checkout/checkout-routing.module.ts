@@ -7,32 +7,24 @@ import { PhonenumberComponent } from './phonenumber/phonenumber.component';
 import { VerifyComponent } from './verify/verify.component';
 
 const routes: Routes = [
-  {
-    path: "",
-    redirectTo: "/phonenumber",
-    pathMatch: "full"
-  },
-  {
-    path: "",
-    children: [
-      {
-        path: "phonenumber",
-        component: PhonenumberComponent
-      },
-      {
-        path: 'verify',
-        component: VerifyComponent
-      },
-      {
-        path: 'pay',
-        component: PayComponent
-      },
-      {
-        path: 'create',
-        component: CreateAccountComponent
-      }
-    ]
-  },
+    {
+      path: "phonenumber",
+      component: PhonenumberComponent
+    },
+    {
+      path: 'verify',
+      component: VerifyComponent
+    },
+    {
+      path: 'pay',
+      component: PayComponent
+    },
+    {
+      path: 'create',
+      component: CreateAccountComponent
+    }
+
+
 ];
 
 @NgModule({
