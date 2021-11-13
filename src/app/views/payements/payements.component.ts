@@ -144,7 +144,6 @@ export class PayementsComponent implements OnInit {
       });
   }
 
-
   displayVendorData() {
     this.vendorData = JSON.parse(localStorage.getItem('vendor-data') || '{}')
     const posts = this.vendorData.posts;
