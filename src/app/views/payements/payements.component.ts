@@ -11,7 +11,7 @@ import { LOCAL_STORAGE_ORDER_DATA } from '../checkout/phonenumber/phonenumber.co
 
 
 
- const LOCAL_STORAGE_KEY_VENDOR_DATA= 'vendor-data';
+const LOCAL_STORAGE_KEY_VENDOR_DATA = 'vendor-data';
 
 @Component({
   selector: 'app-payements',
@@ -125,7 +125,7 @@ export class PayementsComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribeAll$))
       .subscribe((response: any) => {
         const vendor: Vendor = response['data'];
-        localStorage.setItem(LOCAL_STORAGE_KEY_VENDOR_DATA,JSON.stringify(vendor));
+        localStorage.setItem(LOCAL_STORAGE_KEY_VENDOR_DATA, JSON.stringify(vendor));
         this.displayVendorData();
 
         // this.vendorData = vendor;
@@ -144,14 +144,13 @@ export class PayementsComponent implements OnInit {
       });
   }
 
-
-  displayVendorData(){
-     this.vendorData=JSON.parse(localStorage.getItem('vendor-data') || '{}')
-     const posts = this.vendorData.posts;
-     this.vendorPosts = posts.map((post: any) => {
-       post.image_url = this.getCryptoURL(post.crypto_type);
-       return post;
-     });
+  displayVendorData() {
+    this.vendorData = JSON.parse(localStorage.getItem('vendor-data') || '{}')
+    const posts = this.vendorData.posts;
+    this.vendorPosts = posts.map((post: any) => {
+      post.image_url = this.getCryptoURL(post.crypto_type);
+      return post;
+    });
   }
 
   getCryptoURL(name: string) {
@@ -197,48 +196,53 @@ export class PayementsComponent implements OnInit {
     this.validatePhoneNumber(this.form.value.phone_number);
   }
   setPaymentData() {
-    // const amount = this.getAmountInGHS(this.form.value.amount, this.form.value.rate);
-    // const data = {
-    //   user_id: this.vendorData.user_id,
-    //   items: [
-    //     {
-    //       item_id: `cryptoshop-${this.vendorData.user_id}`,
-    //       items_qty: '1',
-    //       name: this.form.value.crypto_type,
-    //       price: amount,
-    //       description: 'Crypto Currency Transaction',
-    //     },
-    //   ],
-    //   transaction_type: 'cryptocurrency',
-    //   transaction_source: 'vendor',
-    //   delivery_phone: this.vendorData?.user.mobile_phone,
-    //   buyer_wallet: this.form.value.crypto_wallet,
-    //   requirement: 'Crypto Currency Transaction',
-    //   currency: 'GHS',
-    //   callback_url: window.location.href,
-    //   cancel_url: window.location.href,
-    // };
-    this.processPayment();
+    const amount = this.getAmountInGHS(this.form.value.amount, this.form.value.rate);
+    const data = {
+      user_id: this.vendorData.user_id,
+      items: [
+        {
+          item_id: `cryptoshop-${this.vendorData.user_id}`,
+          items_qty: '1',
+          name: this.form.value.crypto_type,
+          price: amount,
+          description: 'Crypto Currency Transaction',
+        },
+      ],
+      transaction_type: 'cryptocurrency',
+      transaction_source: 'vendor',
+      delivery_phone: this.vendorData?.user.mobile_phone,
+      buyer_wallet: this.form.value.crypto_wallet,
+      requirement: 'Crypto Currency Transaction',
+      currency: 'GHS',
+      callback_url: window.location.href,
+      cancel_url: window.location.href,
+    };
+    this.processPayment(data);
   }
 
-  processPayment() {
-    // console.log('yes')
-    // this.formValidationStatus.crypto_type = this.form.value.crypto_type === 'Select the  crypto' ?
-    //   'form-select is-invalid' : 'form-select is-valid';
-    // this.formValidationStatus.amount = this.form.value.amount === '' ?
-    //   'form-control is-invalid' : 'form-control is-valid';
-    // this.formValidationStatus.crypto_wallet = this.form.value.crypto_wallet === '' ?
-    //   'form-control is-invalid' : 'form-control is-valid';
-    // this.formValidationStatus.rate = this.form.value.rate === '' || undefined ?
-    //   'form-control is-invalid' : 'form-control is-valid';
+  processPayment(data: any) {
 
-    // if (this.formValidationStatus.amount
-    //   == 'form-control is-valid' && this.formValidationStatus.crypto_type
-    //   == 'form-select is-valid' && this.formValidationStatus.crypto_wallet
-    //   == 'form-control is-valid' && this.formValidationStatus.rate
-    //   == 'form-control is-valid') {
-    //   localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
-      this.router.navigate(['/checkout/phonenumber']);
+    this.formValidationStatus.crypto_type = this.form.value.crypto_type === 'Select the  crypto' ?
+      'form-select is-invalid' : 'form-select is-valid';
+    this.formValidationStatus.amount = this.form.value.amount === '' ?
+      'form-control is-invalid' : 'form-control is-valid';
+    this.formValidationStatus.crypto_wallet = this.form.value.crypto_wallet === '' ?
+      'form-control is-invalid' : 'form-control is-valid';
+
+    this.formValidationStatus.rate = this.form.value.rate === '' ? 'form-control is-invalid'
+      : 'form-control is-valid';
+
+
+
+    console.log(this.formValidationStatus, this.form.value.rate)
+
+    if (this.formValidationStatus.amount
+      == 'form-control is-valid' && this.formValidationStatus.crypto_type
+      == 'form-select is-valid' && this.formValidationStatus.crypto_wallet
+      == 'form-control is-valid' && this.formValidationStatus.rate
+      == 'form-control is-valid') {
+      localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
+      this.router.navigate(['checkout/phonenumber']);
 
     }
     // this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
@@ -248,4 +252,6 @@ export class PayementsComponent implements OnInit {
     // })
 
   }
+
+}
 

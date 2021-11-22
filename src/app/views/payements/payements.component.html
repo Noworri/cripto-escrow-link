@@ -11,7 +11,7 @@
   </div>
 </div>
 
-<div class="card" id="cripto-section" style="width: 30rem">
+<div class="card" id="cripto-section" style="width: 33rem">
   <div class="cripto-data">
     <div class="band">
       <h4>#Crypto</h4>
@@ -37,8 +37,9 @@
           <div class="col col-12 col-sm-12 col-md-6">
             <div class="mb-3">
               <label for="cripto" class="form-label ">Select the crypto you're buying</label>
-              <select  [ngClass]='formValidationStatus.crypto_type' formControlName="crypto_type" [(ngModel)]="criptoSelected" 
-                (change)="onSelectCripto(criptoSelected)" aria-label="Default select example">
+              <select [ngClass]='formValidationStatus.crypto_type' formControlName="crypto_type"
+                [(ngModel)]="criptoSelected" (change)="onSelectCripto(criptoSelected)"
+                aria-label="Default select example">
                 <option *ngFor="let selected of  criptoTypes" [value]="selected.name">{{selected.name}}</option>
               </select>
             </div>
@@ -46,8 +47,8 @@
           <div class="col col-12 col-sm-12 col-md-6">
             <label for="qty" class="form-label">How much are you buying</label>
             <div class="mb-3 input-group col-6">
-              <input type="text" [ngClass]='formValidationStatus.amount' class=" price" placeholder="" aria-label="" aria-describedby=""
-                formControlName="amount" />
+              <input type="text" [ngClass]='formValidationStatus.amount' class=" priceForms price" placeholder=""
+                aria-label="" aria-describedby="" formControlName="amount" />
               <span class="input-group-text" id="basic-addon2">$</span>
             </div>
           </div>
@@ -55,16 +56,16 @@
         <div class="row">
           <div class="container mb-3">
             <label for="btc-adresse" class="form-label">Enter Seller's rate</label>
-            <input type="text" [ngClass]='formValidationStatus.rate'  id="btc-adresse" aria-describedby="emailHelp" formControlName="rate"
-              [ngModel]="rate" (ngModelChange)="getAmount($event)" />
+            <input type="text" [ngClass]='formValidationStatus.rate' id="btc-adresse" aria-describedby="emailHelp"
+              formControlName="rate" (ngModelChange)="getAmount($event)" />
           </div>
         </div>
         <p class="notice">You're paying {{(netPayable | number : '1.2-2') || 0}} GHC including escrow fee</p>
         <div class="row">
           <div class="container mb-3">
             <label for="btc-adresse" class="form-label">Enter your {{ criptoWalletteName }} wallet address</label>
-            <input type="email" [ngClass]='formValidationStatus.crypto_wallet'   id="btc-adresse" aria-describedby="emailHelp"
-              formControlName="crypto_wallet" />
+            <input type="email" [ngClass]='formValidationStatus.crypto_wallet' id="btc-adresse"
+              aria-describedby="emailHelp" formControlName="crypto_wallet" />
           </div>
         </div>
       </div>
@@ -73,10 +74,9 @@
   <div id="information">
     <h5>Important Notes</h5>
     <div class="container">
-      <p>Enter your Bitcoin wallet address Enter your Bitcoin wallet address</p>
       <p>
-        Enter your Bitcoin wallet addressEnter your Bitcoin wallet addressEnter
-        your Bitcoin wallet
+        Your amount will be held in Escrow once you confirm you receive your crypto from the seller to the crypto
+        address you provided above, Escrow will release the amount to the seller
       </p>
     </div>
   </div>
@@ -95,4 +95,14 @@
     <a href="https://play.google.com/store/apps/details?id=co.noworri.noworri&hl=fr&gl=US"><span>Download
         here</span></a>
   </p>
+  <div class="container">
+    <div class="row">
+      <div class="col col-sm-12 col-md-6">
+        <button type="button" class="btn btn-primary btn1"><img src="assets\header\apple icon.png" alt="">    Available on the <br> <span>App Store</span></button>
+      </div>
+      <div class="col col-sm-12 col-md-6">
+        <button type="button" class="btn btn-primary btn2"><img src="assets\header\apple icon.png">  Available on the <span>Google Play</span></button>
+      </div>
+    </div>
+  </div>
 </footer>

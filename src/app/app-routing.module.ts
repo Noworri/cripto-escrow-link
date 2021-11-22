@@ -16,51 +16,16 @@ const routes: Routes = [
   },
   {
     path: 'vendor',
-    children: [
-      {
-        path: 'payement',
-        component: PayementsComponent,
-        resolve:{
-          load:'loading'
-        }
-      },
-      {
-        path:'checkout/phonenumber',
-        component:PhonenumberComponent
-      }
-    ],
+    component:PayementsComponent
   },
   {
-    path: 'checkout',
-    // children: [
-    //   {
-    //     path: 'phonenumber',
-    //     component: PhonenumberComponent,
-    //   },
-    //   {
-    //     path: 'verify',
-    //     component: VerifyComponent,
-    //   },
-    //   {
-    //     path: 'pay',
-    //     component: PayComponent,
-    //   },
-    //   {
-    //     path: 'create',
-    //     component: CreateAccountComponent,
-    //   },
-    // ],
-    loadChildren: () =>
-      import('./views/checkout/checkout.module').then((m) => m.CheckoutModule),
+    path: "checkout",
+    loadChildren: () => import('./views/checkout/checkout.module').then(m => m.CheckoutModule)
   },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  // providers: [{
-  //   provide: 'loading',
-  //   useValue: () => of(true).pipe(delay(1000))
-  // }],
 })
 export class AppRoutingModule {}
