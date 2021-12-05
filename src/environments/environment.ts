@@ -11,8 +11,11 @@ export const environment = {
   checkTransactionStatusUrl: `https://api.noworri.com/api/verifybusinessclientspayment`,
   addAccountUrl: `https://api.noworri.com/api/adduseraccounttest/`,
   deleteAccountUrl: `https://api.noworri.com/api/deleteduseraccounttest`,
-  createBusinessTransactionUrl: `https://api.noworri.com/api/createbusinesstransactiontest`,
-  sendVerificationCodeUrl: `https://api.noworri.com/api/sendverificationcodetest`
+  createCryptoTransactionUrl: `https://api.noworri.com/api/createcryptotransactiontest`,
+  sendVerificationCodeUrl: `https://api.noworri.com/api/sendcryptoverificationcodetest`,
+  checkNoworripaymentUrl : `https://api.noworri.com/api/checknoworricheckoutpaymentstatustest`,
+  verifyPaymentOTPUrl: `https://api.noworri.com/api/submitotptest`,
+
 };
 
 /*
