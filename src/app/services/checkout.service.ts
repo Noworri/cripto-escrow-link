@@ -88,7 +88,7 @@ export class CheckoutService {
   }
 
   payStackPayment(paymentData: any, credentials: string) {
-    const url = environment?.payStackCheckoutUrl;
+    const url = environment?.payChargeUrl;
     let header = new HttpHeaders();
     header = header.append('Authorization', credentials);
     let params = new HttpParams();

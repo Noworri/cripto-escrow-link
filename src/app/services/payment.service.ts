@@ -38,7 +38,7 @@ export class PaymentService {
     const url =
       isTestTransaction === true
         ? 'https://api.noworri.com/api/securewithnoworritest'
-        : environment.payStackCheckoutUrl;
+        : environment.payChargeUrl;
     let header = new HttpHeaders();
     header = header.append('Authorization', `Bearer ${user_id}`);
 
@@ -88,7 +88,7 @@ export class PaymentService {
   }
 
   payStackPayment(paymentData: any, credentials: string) {
-    const url = environment.payStackCheckoutUrl;
+    const url = environment.payChargeUrl;
     let header = new HttpHeaders();
     header = header.append('Authorization', credentials);
     let params = new HttpParams();

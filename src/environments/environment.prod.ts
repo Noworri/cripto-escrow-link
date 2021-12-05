@@ -2,7 +2,7 @@ export const environment = {
   production: true,
   url: `https://api.noworri.com/api/`,
   getuserbyphone: `https://api.noworri.com/api/getuserbyphone`,
-  payStackCheckoutUrl: `https://api.noworri.com/api/securebusinessclientsfunds`,
+  payChargeUrl: `https://api.noworri.com/api/securewithnoworritest`,
   generateCheckoutUrl: `https://api.noworri.com/api/paywithnoworri`,
   checkTransactionStatusUrl: `https://api.noworri.com/api/verifybusinessclientspayment`,
   addAccountUrl: `https://api.noworri.com/api/adduseraccount/`,
