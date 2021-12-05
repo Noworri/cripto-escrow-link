@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CheckoutComponent } from './checkout.component';
 import { CreateAccountComponent } from './create-account/create-account.component';
@@ -16,6 +16,9 @@ import { NgxFlagsModule } from 'ngx-flags';
 import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CheckoutRoutingModule } from './checkout-routing.module';
+import { OtpToProceedComponent } from './otp-to-proceed/otp-to-proceed.component';
+import { EmptyUserPageComponent } from './empty-user-page/empty-user-page.component';
+import { PayementOptionComponent } from './payement-option/payement-option.component';
 
 @NgModule({
   imports: [
@@ -23,6 +26,8 @@ import { CheckoutRoutingModule } from './checkout-routing.module';
     NgbPaginationModule,
     NgbAlertModule,
     IntlTelInputNgModule.forRoot(),
+    FormsModule,
+    ReactiveFormsModule,
     NgxFlagsModule,
     NgxFlagsModule,
     MatIconModule,
@@ -38,6 +43,9 @@ import { CheckoutRoutingModule } from './checkout-routing.module';
     PayComponent,
     VerifyComponent,
     PhonenumberComponent,
+    OtpToProceedComponent,
+    EmptyUserPageComponent,
+    PayementOptionComponent
   ],
   exports: [
     CheckoutComponent,
@@ -45,6 +53,10 @@ import { CheckoutRoutingModule } from './checkout-routing.module';
     PayComponent,
     VerifyComponent,
     PhonenumberComponent,
+    OtpToProceedComponent,
+    EmptyUserPageComponent,
+    PayementOptionComponent
   ],
+  schemas:[CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })
 export class CheckoutModule {}

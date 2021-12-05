@@ -16,6 +16,7 @@ export class VendorsService {
 
   payStackPayment(paymentData: any, credentials: string) {
     const url = environment.generateCheckoutUrl;
+    // const url = `http://localhost:8000/api/buycryptowithnoworri`
     let header = new HttpHeaders();
     header = header.append('Authorization', credentials);
     let params = new HttpParams();
@@ -50,7 +51,7 @@ export class VendorsService {
     header = header.append('Authorization', credentials);
     const url = isTestTransaction
       ? 'https://api.noworri.com/api/createbusinesstransactiontest'
-      : environment.createBusinessTransactionUrl;
+      : environment.createCryptoTransactionUrl;
     if (!transactionDetails.deadline || !transactionDetails.revision) {
       transactionDetails.deadline = '';
       transactionDetails.revision = 0;
@@ -71,6 +72,8 @@ export class VendorsService {
 
   getVendorDetails(id: any) {
     const url = `https://api.noworri.com/api/cryptovendor/${id}`;
+    // const url = `http://localhost:8000/api/cryptovendor/${id}`
+
     let header = new HttpHeaders();
     // header = header.append('Authorization', credentials);
     header.append('Access-Control-Allow-Origin', '*');
@@ -86,8 +89,8 @@ export class VendorsService {
   }
 
   getCryptoDetails() {
-    // const url = `https://api.noworri.com/api/getcryptodata`;
-    const url = `http://localhost:8000/api/getcryptodata`;
+    const url = `https://api.noworri.com/api/getcryptodata`;
+    // const url = `http://localhost:8000/api/getcryptodata`;
     let header = new HttpHeaders();
     // header = header.append('Authorization', credentials);
     header.append('Access-Control-Allow-Origin', '*');

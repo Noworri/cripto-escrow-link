@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil } from 'rxjs/operators';
+import { ORDER_DATA_KEY } from 'src/app/models/constants';
 import { Vendor } from 'src/app/models/vendors.model';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { VendorsService } from 'src/app/services/vendors.service';
@@ -11,7 +12,7 @@ import { LOCAL_STORAGE_ORDER_DATA } from '../checkout/phonenumber/phonenumber.co
 
 
 
-const LOCAL_STORAGE_KEY_VENDOR_DATA = 'vendor-data';
+export const LOCAL_STORAGE_KEY_VENDOR_DATA = 'vendor-data';
 
 @Component({
   selector: 'app-payements',
@@ -45,15 +46,32 @@ export class PayementsComponent implements OnInit {
     rate: 'form-control'
   }
 
+  formValidationMessages = {
+    crypto_type: {
+      required: 'Crypto Type is required',
+    },
+    amount: {
+      required: 'Amount is required',
+      pattern: 'Only digits allowed'
+    },
+    crypto_wallet: {
+      required: 'Your Wallet is required'
+    },
+    rate:{
+      required: 'Seller\'s rate is required',
+      pattern: 'Only decimal number allowed'
+    }
+  }
+
 
 
   unsubscribeAll$ = new Subject();
 
-  criptoSelected: any = this.criptoTypes[0].name;
+  criptoSelected: any = 'B';
 
   criptoWalletteName = 'crypto';
   username: string | null = '';
-  vendorID: any;
+  vendorUsername: any;
   vendorData: any;
   vendorPosts: any;
   form!: FormGroup;
@@ -63,6 +81,8 @@ export class PayementsComponent implements OnInit {
   rate: any;
   netPayable: number = 0;
   cryptoData: any[] = [];
+  digitsValidationPattern = /^[1-9]\d*(\.\d+)?$/;
+
 
 
   constructor(
@@ -78,23 +98,24 @@ export class PayementsComponent implements OnInit {
     // this.getUrlParams(window.location.href);
     this.getVendorUrlParams();
     this.getCryptoDetails();
+    this.setFormValues();
   }
 
   getVendorUrlParams() {
     this.activatedRoute.queryParams.subscribe(params => {
-      this.vendorID = params
+      this.vendorUsername = params
       setTimeout(() => {
-        this.getVendorDetails(this.vendorID['id']);
+        this.getVendorDetails(this.vendorUsername['token']);
       }, 1000)
     })
   }
 
-  ngAfterContentInit() {
+  setFormValues() {
     this.form = this.formBuilder.group({
-      crypto_type: [this.criptoTypes[0].name, Validators.required],
+      crypto_type: ['Bitcoin', Validators.required],
       amount: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       crypto_wallet: ['', Validators.required],
-      rate: ['', Validators.required]
+      rate: ['', [Validators.required, Validators.pattern(this.digitsValidationPattern)]]
     });
   }
 
@@ -104,8 +125,33 @@ export class PayementsComponent implements OnInit {
   }
 
   getAmount(rate: any) {
-    this.netPayable = this.form.value.amount * rate;
+    const amount = this.form.value.amount * rate;
+    this.netPayable = amount + this.getNoworriFee(amount);
   }
+
+
+
+  getNoworriFee(price: any): number {
+    let fee = 0;
+    if(price < 200) {
+      fee = 5;
+    } else if (price > 200 && price < 600) {
+      fee = 15
+    } else if (price > 600 && price < 1000) {
+      fee = 25
+    } else if (price > 1000) {
+      fee = ((price * 2.5) / 100) + 0.75;
+    }
+    // 0GH -200GH = Fees 5GH
+
+    // 201GH - 600GH = Fees 15GH
+
+    // 601GH - 1000GH = Fess 25GH
+
+    // +1000 GH = Fees 2.5%+ 0.75 GH
+
+    return Number(fee);
+  }  
 
   validatePhoneNumber(value: any) {
     this.vendorService.getBuyerDetails(value).pipe(take(1)).subscribe(resp => {
@@ -125,7 +171,7 @@ export class PayementsComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribeAll$))
       .subscribe((response: any) => {
         const vendor: Vendor = response['data'];
-        localStorage.setItem(LOCAL_STORAGE_KEY_VENDOR_DATA, JSON.stringify(vendor));
+        sessionStorage.setItem(LOCAL_STORAGE_KEY_VENDOR_DATA, JSON.stringify(vendor));
         this.displayVendorData();
 
         // this.vendorData = vendor;
@@ -140,15 +186,14 @@ export class PayementsComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribeAll$))
       .subscribe((response: any) => {
         this.cryptoData = response['data'];
-        console.log('[cryptoData]', this.cryptoData)
+        this.setFormValues();
       });
   }
 
   displayVendorData() {
-    this.vendorData = JSON.parse(localStorage.getItem('vendor-data') || '{}')
+    this.vendorData = JSON.parse(sessionStorage.getItem('vendor-data') || '{}')
     const posts = this.vendorData.posts;
     this.vendorPosts = posts.map((post: any) => {
-      post.image_url = this.getCryptoURL(post.crypto_type);
       return post;
     });
   }
@@ -185,8 +230,8 @@ export class PayementsComponent implements OnInit {
   // }
 
   onSelectCripto(criptoSelected: any) {
-    if (this.criptoSelected == 'select the  cripto') {
-      this.criptoWalletteName = 'cripto';
+    if (this.criptoSelected == 'Select the crypto') {
+      this.criptoWalletteName = 'BTC';
     } else {
       this.criptoWalletteName = criptoSelected;
     }
@@ -208,6 +253,7 @@ export class PayementsComponent implements OnInit {
           description: 'Crypto Currency Transaction',
         },
       ],
+      name: this.form.value.crypto_type,
       transaction_type: 'cryptocurrency',
       transaction_source: 'vendor',
       delivery_phone: this.vendorData?.user.mobile_phone,
@@ -234,17 +280,21 @@ export class PayementsComponent implements OnInit {
 
 
 
-    console.log(this.formValidationStatus, this.form.value.rate)
-
-    if (this.formValidationStatus.amount
-      == 'form-control is-valid' && this.formValidationStatus.crypto_type
-      == 'form-select is-valid' && this.formValidationStatus.crypto_wallet
-      == 'form-control is-valid' && this.formValidationStatus.rate
-      == 'form-control is-valid') {
-      localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
-      this.router.navigate(['checkout/phonenumber']);
-
+    if(this.form.valid) {
+      sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
+      this.router.navigate(['checkout/phonenumber']);  
     }
+    // if (this.formValidationStatus.amount
+    //   == 'form-control is-valid' && this.formValidationStatus.crypto_type
+    //   == 'form-select is-valid' && this.formValidationStatus.crypto_wallet
+    //   == 'form-control is-valid' && this.formValidationStatus.rate
+    //   == 'form-control is-valid') {
+    //   localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
+    //   this.router.navigate(['checkout/phonenumber']);
+
+    // }
+
+
     // this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
     //   if(response.checkout_url) {
     //     window.location = response.checkout_url;

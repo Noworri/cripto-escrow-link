@@ -1,9 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NgForm } from '@angular/forms';
+import { FormControl, FormGroup, NgForm, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { TRANSACTION_DATA_KEY, USER_DATA_KEY } from 'src/app/models/constants';
 import {
   BusinessTransactionData,
   BusinessTransactionItem,
@@ -23,7 +24,7 @@ export const LOCAL_STORAGE_ORDER_DATA = 'order-data';
 })
 export class PhonenumberComponent implements OnInit, OnDestroy {
   unsubscribe$ = new Subject();
-  businessTransactionData!: BusinessTransactionData;
+  businessTransactionData!: BusinessTransactionData | any;
   prefixCountryCode!: string;
   user_phone!: string;
   user_api_key!: string;
@@ -34,6 +35,7 @@ export class PhonenumberComponent implements OnInit, OnDestroy {
   isValidInputType!: boolean;
   checkoutItemsData!: BusinessTransactionItem[];
   cancelUrl!: string;
+  isSendingCode: boolean = false;
 
   constructor(
     private router: Router,
@@ -42,9 +44,9 @@ export class PhonenumberComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    localStorage.removeItem(LOCAL_STORAGE_ORDER_DATA);
-    this.getUrlParams(window.location.href);
     this.getBusinessData();
+    const orderData = sessionStorage.getItem(LOCAL_STORAGE_ORDER_DATA);
+    this.businessTransactionData =JSON.parse(`${orderData}`) || null;
   }
 
   validatePhoneInput(phoneNumber: string) {
@@ -57,6 +59,7 @@ export class PhonenumberComponent implements OnInit, OnDestroy {
   }
 
   onProceed(form: NgForm) {
+    this.isSendingCode = true;
     const telInputPlaceholderInputValue = document
       .getElementsByTagName('input')[0]
       .getAttribute('placeholder');
@@ -74,39 +77,45 @@ export class PhonenumberComponent implements OnInit, OnDestroy {
     this.validatePhoneInput(form.value['userPhone']);
     if (this.isValidInputType === true) {
       this.user_phone = `${this.prefixCountryCode}${form.value['userPhone']}`;
-      const userData = {
+      const params = {
         mobile_phone: this.user_phone,
       };
-      this.loader.start();
-      this.checkoutService
-        .sendVerificationCode(userData, this.user_api_key)
-        .pipe(takeUntil(this.unsubscribe$))
-        .subscribe((response: any) => {
-          if (response['status'] === 'success') {
-            this.loader.stop();
-            this.userData = response['data'];
-            this.businessTransactionData['initiator_id'] =
-              response['data'].user_uid;
-            const transactionDetails = JSON.stringify(
-              this.businessTransactionData
-            );
-            localStorage.setItem(LOCAL_STORAGE_KEY, transactionDetails);
-            const data = JSON.stringify(response['data']);
-            localStorage.setItem(LOCAL_STORAGE_USER_KEY, data);
-            this.router.navigate(['verify']);
-          } else {
-            this.loader.stop();
-            this.hasError = true;
-            this.errorMessage = response['message'];
-            setTimeout(() => {
-              this.router.navigate(['create']);
-            }, 4000);
-          }
-        });
+      this.sendVerificationCode(params)
     } else {
       this.hasError = true;
       this.errorMessage = 'Invalid Phone number';
     }
+  }
+
+  sendVerificationCode(params: any) {
+    this.loader.start();
+    this.checkoutService
+    .sendVerificationCode(params)
+    .pipe(takeUntil(this.unsubscribe$))
+    .subscribe((response: any) => {
+      this.loader.stop();
+      this.isSendingCode=false;
+      if (response['status'] === 'success') {
+        this.loader.stop();
+        this.userData = response['data'];
+        this.businessTransactionData['initiator_id'] =
+          response['data'].user_uid;
+        const transactionDetails = JSON.stringify(
+          this.businessTransactionData
+        );
+        sessionStorage.setItem(TRANSACTION_DATA_KEY, transactionDetails);
+        const data = JSON.stringify(response['data']);
+        sessionStorage.setItem(USER_DATA_KEY, data);
+        this.router.navigate(['verify']);
+      } else {
+        this.loader.stop();
+        this.hasError = true;
+        this.errorMessage = response['message'];
+        setTimeout(() => {
+          this.router.navigate(['create']);
+        }, 4000);
+      }
+    });
   }
 
   ngOnDestroy() {
@@ -118,24 +127,24 @@ export class PhonenumberComponent implements OnInit, OnDestroy {
     const params = new URL(url).searchParams;
     const items = params.get('items') || '';
     this.checkoutItemsData = JSON.parse(items);
-    this.user_api_key = params.get('credentials') || '';
+    // this.user_api_key = params.get('credentials') || '';
     this.cancelUrl = params.get('cancel_url') || '';
-    this.businessTransactionData = {
-      user_id: params.get('user_id') || undefined,
-      initiator_id: '',
-      initiator_role: 'buy',
-      name: '',
-      price: '',
-      items: this.checkoutItemsData,
-      description: 'e-commerce transaction',
-      delivery_phone: params.get('delivery_phone') || undefined,
-      payment_id: '',
-      currency: params.get('currency') || undefined,
-      callback_url: params.get('callback_url')|| undefined,
-      cancel_url: params.get('cancel_url')|| undefined,
-      order_id: params.get('order_id')|| undefined
-    };
-    localStorage.setItem(LOCAL_STORAGE_API_KEY, this.user_api_key);
+    // this.businessTransactionData = {
+    //   user_id: params.get('user_id') || undefined,
+    //   initiator_id: '',
+    //   initiator_role: 'buy',
+    //   name: '',
+    //   price: '',
+    //   items: this.checkoutItemsData,
+    //   description: 'e-commerce transaction',
+    //   delivery_phone: params.get('delivery_phone') || undefined,
+    //   payment_id: '',
+    //   currency: params.get('currency') || undefined,
+    //   callback_url: params.get('callback_url')|| undefined,
+    //   cancel_url: params.get('cancel_url')|| undefined,
+    //   order_id: params.get('order_id')|| undefined
+    // };
+    // localStorage.setItem(LOCAL_STORAGE_API_KEY, this.user_api_key);
   }
 
   getBusinessData() {

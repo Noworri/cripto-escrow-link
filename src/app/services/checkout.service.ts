@@ -118,8 +118,8 @@ export class CheckoutService {
     let header = new HttpHeaders();
     header = header.append('Authorization', credentials);
     const url = isTestTransaction
-      ? 'https://api.noworri.com/api/createbusinesstransactiontest'
-      : environment.createBusinessTransactionUrl;
+      ? 'https://api.noworri.com/api/createcryptotransactiontest'
+      : environment.createCryptoTransactionUrl;
     if (!transactionDetails.deadline || !transactionDetails.revision) {
       transactionDetails.deadline = '';
       transactionDetails.revision = 0;

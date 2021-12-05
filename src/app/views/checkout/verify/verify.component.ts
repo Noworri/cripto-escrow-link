@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { USER_DATA_KEY } from 'src/app/models/constants';
 import { BusinessTransactionData } from '../models/BusinessTransactionData';
 import {
   LOCAL_STORAGE_API_KEY,
@@ -43,7 +44,6 @@ export class VerifyComponent implements OnInit, OnDestroy {
     private checkoutService: CheckoutService,
     private loader: NgxUiLoaderService
   ) {
-    this.user_api_key = localStorage.getItem(LOCAL_STORAGE_API_KEY) || '';
   }
 
   ngOnInit(): void {}
@@ -60,7 +60,7 @@ export class VerifyComponent implements OnInit, OnDestroy {
   onVerify() {
     this.loader.start();
     this.checkoutService
-      .verifyUser(this.otp, this.user_api_key)
+      .verifyUser({code: this.otp})
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response: any) => {
         if (response['status'] === 200) {
