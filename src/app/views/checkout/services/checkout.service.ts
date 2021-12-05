@@ -16,8 +16,8 @@ export class CheckoutService {
   constructor(private http: HttpClient) {}
 
   sendVerificationCode(data: any) {
-    // const url = environment.sendVerificationCodeUrl;
-    const url = 'http://127.0.0.1:8000/api/sendcryptoverificationcodetest';
+    const url = environment.sendVerificationCodeUrl;
+    // const url = 'http://127.0.0.1:8000/api/sendcryptoverificationcodetest';
     return this.http.post(url, data).pipe(
       map((response) => {
         return response;
@@ -30,8 +30,8 @@ export class CheckoutService {
   }
 
   verifyUser(data: any) {
-    // const url = `https://api.noworri.com/api/verifycryptouser`;
-    const url = 'http://127.0.0.1:8000/api/verifycryptouser';
+    const url = `https://api.noworri.com/api/verifycryptouser`;
+    // const url = 'http://127.0.0.1:8000/api/verifycryptouser';
     return this.http.post(url, data).pipe(
       map((response) => {
         return response;
@@ -104,10 +104,10 @@ export class CheckoutService {
   createTransaction(transactionDetails: any, credentials: string, isTestTransaction: boolean) {
     let header = new HttpHeaders();
     header = header.append('Authorization', credentials);
-    const url = 'http://127.0.0.1:8000/api/createbusinesstransactiontest';
-    // const url = isTestTransaction
-    //   ? 'https://api.noworri.com/api/createbusinesstransactiontest'
-    //   : environment.createBusinessTransactionUrl;
+    // const url = 'http://127.0.0.1:8000/api/createbusinesstransactiontest';
+    const url = isTestTransaction
+      ? 'https://api.noworri.com/api/createcryptotransactiontest'
+      : environment.createCryptoTransactionUrl;
     if (!transactionDetails.deadline || !transactionDetails.revision) {
       transactionDetails.deadline = '';
       transactionDetails.revision = 0;
