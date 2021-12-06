@@ -145,7 +145,7 @@ export class PayementOptionComponent implements OnInit {
     data.mobile_money = mobileMoney;
 
     this.paymentService
-      .processPayment(data, this.userData.user_uid, true)
+      .processPayment(data, this.userData.user_uid, this.isTestTransaction)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         if (response && response.status === true) {
