@@ -1,16 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { map, switchMap, take, takeUntil } from 'rxjs/operators';
-import { ORDER_DATA_KEY } from 'src/app/models/constants';
+import { DEFAULT_AVATAR, ORDER_DATA_KEY } from 'src/app/models/constants';
 import { Vendor } from 'src/app/models/vendors.model';
 import { TransactionService } from 'src/app/services/transaction.service';
 import { VendorsService } from 'src/app/services/vendors.service';
 import { LOCAL_STORAGE_ORDER_DATA } from '../checkout/phonenumber/phonenumber.component';
-
-
-
 
 export const LOCAL_STORAGE_KEY_VENDOR_DATA = 'vendor-data';
 
@@ -38,13 +36,12 @@ export class PayementsComponent implements OnInit {
     },
   ];
 
-
   formValidationStatus = {
     crypto_type: 'form-select',
     amount: 'form-control ',
     crypto_wallet: 'form-control',
-    rate: 'form-control'
-  }
+    rate: 'form-control',
+  };
 
   formValidationMessages = {
     crypto_type: {
@@ -52,18 +49,16 @@ export class PayementsComponent implements OnInit {
     },
     amount: {
       required: 'Amount is required',
-      pattern: 'Only digits allowed'
+      pattern: 'Only digits allowed',
     },
     crypto_wallet: {
-      required: 'Your Wallet is required'
+      required: 'Your Wallet is required',
     },
-    rate:{
-      required: 'Seller\'s rate is required',
-      pattern: 'Only decimal number allowed'
-    }
-  }
-
-
+    rate: {
+      required: "Seller's rate is required",
+      pattern: 'Only decimal number allowed',
+    },
+  };
 
   unsubscribeAll$ = new Subject();
 
@@ -82,8 +77,7 @@ export class PayementsComponent implements OnInit {
   netPayable: number = 0;
   cryptoData: any[] = [];
   digitsValidationPattern = /^[1-9]\d*(\.\d+)?$/;
-
-
+  avatar: SafeHtml | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -92,7 +86,8 @@ export class PayementsComponent implements OnInit {
     private router: Router,
     private transactionService: TransactionService,
     private activatedRoute: ActivatedRoute,
-  ) { }
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit(): void {
     // this.getUrlParams(window.location.href);
@@ -102,12 +97,12 @@ export class PayementsComponent implements OnInit {
   }
 
   getVendorUrlParams() {
-    this.activatedRoute.queryParams.subscribe(params => {
-      this.vendorUsername = params
+    this.activatedRoute.queryParams.subscribe((params) => {
+      this.vendorUsername = params;
       setTimeout(() => {
         this.getVendorDetails(this.vendorUsername['token']);
-      }, 1000)
-    })
+      }, 1000);
+    });
   }
 
   setFormValues() {
@@ -115,7 +110,10 @@ export class PayementsComponent implements OnInit {
       crypto_type: ['Bitcoin', Validators.required],
       amount: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       crypto_wallet: ['', Validators.required],
-      rate: ['', [Validators.required, Validators.pattern(this.digitsValidationPattern)]]
+      rate: [
+        '',
+        [Validators.required, Validators.pattern(this.digitsValidationPattern)],
+      ],
     });
   }
 
@@ -129,18 +127,16 @@ export class PayementsComponent implements OnInit {
     this.netPayable = amount + this.getNoworriFee(amount);
   }
 
-
-
   getNoworriFee(price: any): number {
     let fee = 0;
-    if(price < 200) {
+    if (price < 200) {
       fee = 5;
     } else if (price > 200 && price < 600) {
-      fee = 15
+      fee = 15;
     } else if (price > 600 && price < 1000) {
-      fee = 25
+      fee = 25;
     } else if (price > 1000) {
-      fee = ((price * 2.5) / 100) + 0.75;
+      fee = (price * 2.5) / 100 + 0.75;
     }
     // 0GH -200GH = Fees 5GH
 
@@ -151,18 +147,22 @@ export class PayementsComponent implements OnInit {
     // +1000 GH = Fees 2.5%+ 0.75 GH
 
     return Number(fee);
-  }  
+  }
 
   validatePhoneNumber(value: any) {
-    this.vendorService.getBuyerDetails(value).pipe(take(1)).subscribe(resp => {
-      if (resp) {
-        this.buyerDetails = resp;
-        this.setPaymentData();
-      } else {
-        this.hasError = true;
-        this.errorMessage = "Your phone number is not yet registered on noworri";
-      }
-    })
+    this.vendorService
+      .getBuyerDetails(value)
+      .pipe(take(1))
+      .subscribe((resp) => {
+        if (resp) {
+          this.buyerDetails = resp;
+          this.setPaymentData();
+        } else {
+          this.hasError = true;
+          this.errorMessage =
+            'Your phone number is not yet registered on noworri';
+        }
+      });
   }
 
   getVendorDetails(vendorID: any) {
@@ -171,7 +171,10 @@ export class PayementsComponent implements OnInit {
       .pipe(takeUntil(this.unsubscribeAll$))
       .subscribe((response: any) => {
         const vendor: Vendor = response['data'];
-        sessionStorage.setItem(LOCAL_STORAGE_KEY_VENDOR_DATA, JSON.stringify(vendor));
+        sessionStorage.setItem(
+          LOCAL_STORAGE_KEY_VENDOR_DATA,
+          JSON.stringify(vendor)
+        );
         this.displayVendorData();
 
         // this.vendorData = vendor;
@@ -191,20 +194,22 @@ export class PayementsComponent implements OnInit {
   }
 
   displayVendorData() {
-    this.vendorData = JSON.parse(sessionStorage.getItem('vendor-data') || '{}')
+    this.vendorData = JSON.parse(sessionStorage.getItem('vendor-data') || '{}');
     const posts = this.vendorData.posts;
     this.vendorPosts = posts.map((post: any) => {
       return post;
     });
+    this.avatar =
+    this.sanitizer.bypassSecurityTrustHtml(this.vendorData?.avatar) ||
+    DEFAULT_AVATAR;
   }
 
   getCryptoURL(name: string) {
-    const cryptoData = this.cryptoData?.find((crypto: any) => crypto.name === name);
+    const cryptoData = this.cryptoData?.find(
+      (crypto: any) => crypto.name === name
+    );
     return cryptoData?.image_url;
   }
-
-
-
 
   getCryptoIcon(crypto_type: string) {
     const baseRoute: string = 'assetscripto\\';
@@ -241,7 +246,10 @@ export class PayementsComponent implements OnInit {
     this.validatePhoneNumber(this.form.value.phone_number);
   }
   setPaymentData() {
-    const amount = this.getAmountInGHS(this.form.value.amount, this.form.value.rate);
+    const amount = this.getAmountInGHS(
+      this.form.value.amount,
+      this.form.value.rate
+    );
     const data = {
       user_id: this.vendorData.user_id,
       items: [
@@ -267,22 +275,27 @@ export class PayementsComponent implements OnInit {
   }
 
   processPayment(data: any) {
+    this.formValidationStatus.crypto_type =
+      this.form.value.crypto_type === 'Select the  crypto'
+        ? 'form-select is-invalid'
+        : 'form-select is-valid';
+    this.formValidationStatus.amount =
+      this.form.value.amount === ''
+        ? 'form-control is-invalid'
+        : 'form-control is-valid';
+    this.formValidationStatus.crypto_wallet =
+      this.form.value.crypto_wallet === ''
+        ? 'form-control is-invalid'
+        : 'form-control is-valid';
 
-    this.formValidationStatus.crypto_type = this.form.value.crypto_type === 'Select the  crypto' ?
-      'form-select is-invalid' : 'form-select is-valid';
-    this.formValidationStatus.amount = this.form.value.amount === '' ?
-      'form-control is-invalid' : 'form-control is-valid';
-    this.formValidationStatus.crypto_wallet = this.form.value.crypto_wallet === '' ?
-      'form-control is-invalid' : 'form-control is-valid';
+    this.formValidationStatus.rate =
+      this.form.value.rate === ''
+        ? 'form-control is-invalid'
+        : 'form-control is-valid';
 
-    this.formValidationStatus.rate = this.form.value.rate === '' ? 'form-control is-invalid'
-      : 'form-control is-valid';
-
-
-
-    if(this.form.valid) {
+    if (this.form.valid) {
       sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
-      this.router.navigate(['checkout/phonenumber']);  
+      this.router.navigate(['checkout/phonenumber']);
     }
     // if (this.formValidationStatus.amount
     //   == 'form-control is-valid' && this.formValidationStatus.crypto_type
@@ -294,14 +307,10 @@ export class PayementsComponent implements OnInit {
 
     // }
 
-
     // this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
     //   if(response.checkout_url) {
     //     window.location = response.checkout_url;
     //   }
     // })
-
   }
-
 }
-
