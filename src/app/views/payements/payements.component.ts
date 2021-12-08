@@ -297,20 +297,5 @@ export class PayementsComponent implements OnInit {
       sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
       this.router.navigate(['checkout/phonenumber']);
     }
-    // if (this.formValidationStatus.amount
-    //   == 'form-control is-valid' && this.formValidationStatus.crypto_type
-    //   == 'form-select is-valid' && this.formValidationStatus.crypto_wallet
-    //   == 'form-control is-valid' && this.formValidationStatus.rate
-    //   == 'form-control is-valid') {
-    //   localStorage.setItem(LOCAL_STORAGE_ORDER_DATA, JSON.stringify(data));
-    //   this.router.navigate(['checkout/phonenumber']);
-
-    // }
-
-    // this.transactionService.processToCheckout(data, this.vendorData.user_id).pipe(takeUntil(this.unsubscribeAll$)).subscribe(response => {
-    //   if(response.checkout_url) {
-    //     window.location = response.checkout_url;
-    //   }
-    // })
   }
 }
