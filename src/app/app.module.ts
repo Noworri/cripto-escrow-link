@@ -24,6 +24,7 @@ import { NgOtpInputModule } from 'ng-otp-input';
 // import { NgxUiLoaderModule } from 'ngx-ui-loader';
 import { CheckoutModule } from './views/checkout/checkout.module';
 import { IconsModule } from './icons/icons.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [AppComponent, HeaderComponent, PayementsComponent],
@@ -48,6 +49,7 @@ import { IconsModule } from './icons/icons.module';
     NgbPaginationModule,
     NgbAlertModule,
     IconsModule,
+    BrowserAnimationsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

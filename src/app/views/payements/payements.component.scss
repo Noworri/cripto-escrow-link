@@ -6,6 +6,12 @@
   .card {
     max-width: 30rem;
     background-color: #f1f6ff;
+    .container {
+      position: relative;
+      top: 20px;
+      width: 120px;
+      height: 120px;
+    }
     .profil {
       display: flex;
       justify-content: center;
@@ -31,6 +37,8 @@
       text-align: center;
       font-weight: bold;
       color: black;
+
+      font-size: 22px;
     }
     h6 {
       text-align: center;
@@ -43,20 +51,20 @@
 #cripto-section {
   margin: 0 auto;
   margin-top: 30px;
-  .band {
-    background: #497dd5 0% 0% no-repeat padding-box;
-    opacity: 1;
-    height: 40px;
-    h4 {
-      letter-spacing: 0px;
-      color: #ffffff;
-      opacity: 1;
-      font-weight: 600;
-      position: relative;
-      top: 6px;
-      left: 15px;
-    }
-  }
+  // .band {
+  //   background: #497dd5 0% 0% no-repeat padding-box;
+  //   opacity: 1;
+  //   height: 40px;
+  //   h4 {
+  //     letter-spacing: 0px;
+  //     color: #ffffff;
+  //     opacity: 1;
+  //     font-weight: 600;
+  //     position: relative;
+  //     top: 6px;
+  //     left: 15px;
+  //   }
+  // }
   .card-body {
     .cripto {
       display: flex;
@@ -65,11 +73,12 @@
         position: relative;
         top: 5px;
         margin-right: 10px;
-       
       }
       .text {
+        margin-top: 10px;
+        margin-left: -12px;
         h3 {
-          font-size: 20px;
+          font-size: 18px;
           color: #1c1c1c;
           opacity: 1;
         }
@@ -103,7 +112,7 @@ hr {
   }
   .notice {
     position: relative;
-    bottom: 8px;
+    bottom: 15px;
     letter-spacing: 0px;
     color: #ff0045;
     opacity: 1;
@@ -167,74 +176,15 @@ footer {
         font-size: 12px;
         text-align: center;
       }
-
-      // .btn1 {
-      //   background-color: #9c2cfa;
-      //   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      //   text-align: center;
-      //   border-radius: 10px;
-      //   border-color: #9c2cfa;
-      //   .first{
-      //       display: flex;
-      //   }
-      //   i{
-      //       position: relative;
-      //       right: 8px;
-      //       top: 7px;
-      //   }
-      //   span {
-      //     font-weight: 700;
-      //     text-align: center;
-      //     position: relative;
-      //     left: 10px;
-      //     top: -6px;
-      //   }
-
-      // }
-
-      .btn2 {
-        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-        text-align: center;
-        border-radius: 10px;
-        border-color: #497dd5;
-        .second {
-          display: flex;
-        }
-        i {
-          position: relative;
-          right: 8px;
-          top: 7px;
-          color: #497dd5;
-        }
-        span {
-          font-weight: 700;
-          text-align: center;
-          position: relative;
-          left: 10px;
-          top: -6px;
-        }
-      }
     }
+  }
+}
 
-    //    .btn2{
-    //     background-color:white;
-    //     font-size: medium;
-    //     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    //     text-align: center;
-    //     color: black;
-    //     border-radius: 10px;
-    //     border: 0;
-    //     text-align: center;
-    //     img{
-    //         width: 0.1rem;
-    //         position: relative;
-    //         top: 8px;
-    //         right: 5px;
-    //     }
-    //     span{
-    //         font-weight: 800;
-    //     }
-    // }
+.googlePlaybutton {
+  display: flex;
+  justify-content: center;
+  img {
+    width: 10rem;
   }
 }
 
