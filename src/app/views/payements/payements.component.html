@@ -1,7 +1,9 @@
 <div id="profil-photo">
   <div class="card">
     <div class="profil">
-      <div class="card-img-top" [innerHTML]="avatar"></div>
+      <div class="container">
+        <div class="card-img-top" [innerHTML]="avatar"></div>
+      </div>
     </div>
     <div class="card-body">
       <h3>{{ vendorData?.store_name }}</h3>
@@ -10,22 +12,41 @@
     </div>
   </div>
 </div>
-
 <div class="card" id="cripto-section" style="width: 33rem">
   <div class="cripto-data">
-    <div class="band">
+    <!-- <div class="band">
       <h4>#Crypto</h4>
-    </div>
+    </div> -->
     <div class="card-body">
       <div *ngFor="let post of vendorPosts" class="cripto">
-        <span><img width="10" height="10" src="{{ post?.crypto.image_url }}" alt="" /></span>
-        <div class="text">
-          <h3 class="cripto-title">{{ post?.crypto_type }}</h3>
-          <h6>
-            ${{ post.amount }} Available for sale
-            <span>@ {{ post?.rate }} rate</span>
-          </h6>
+        <span><img width="50" height="50" src="{{ post?.crypto.image_url }}" alt="" /></span>
+        <div class="container">
+          <div class="row">
+            <div class="col">
+              <div class="text">
+                <h3 class="cripto-title">{{ post?.crypto_type }}</h3>
+                <h6>
+                  <!-- post.amount doit etre une floate,j'ai mi  '.50' comme exemple ui -->
+                  ${{ post.amount }}.50 for sale
+                  <!-- post.rate doit etre une floate,j'ai mi  '.50' comme exemple ui -->
+                  <span>@ {{ post?.rate }}.50 GHC</span>
+                </h6>
+              </div>
+            </div>
+            <div class="col">
+              <div class="text">
+                <h3 class="cripto-title text-end">3,48 $</h3>
+                <h6 class="text-end">
+                  <span>-0.55 %</span>
+                </h6>
+              </div>
+            </div>
+          </div>
         </div>
+
+
+
+
       </div>
     </div>
   </div>
@@ -119,27 +140,13 @@
     <a href="https://play.google.com/store/apps/details?id=co.noworri.noworri&hl=fr&gl=US"><span>Download
         here</span></a>
   </p>
-
-
-
-
   <div class="container">
-
-
-
-
     <div class="gap-2 d-grid d-md-block">
-      <!-- <button class="btn btn-primary btn1" type="button">
-        <div class="first">
-          <i class='fab fa-apple fa-2x'></i><br /> Available on
-        </div> <span>App Store</span>
-      </button> -->
-      <button class="btn btn-light btn2" type="button">
-      <div class="second">
-        <i class='fab fa-google-play fa-2x'></i><br /> Available on
-      </div> <span>Play Store</span>
-      </button>
+      <div class="googlePlaybutton">
+        <a href="https://play.google.com/store/apps/details?id=co.noworri.noworri">
+          <img src="../../../assets/google-play-badge.png" />
+        </a>
+      </div>
     </div>
-   
   </div>
 </footer>
