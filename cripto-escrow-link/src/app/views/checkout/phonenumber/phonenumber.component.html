@@ -1,0 +1,59 @@
+<section id="container">
+  <div class="card" style="width: 25rem">
+    <a [href]="cancelUrl"><mat-icon class="cancel">cancel</mat-icon></a>
+    <div class="img">
+      <img
+        src="../../../assets/checkout/logo transparence.png"
+        class="card-img-top"
+        alt="..."
+      />
+    </div>
+    <div class="card-body">
+      <div class="making">
+        <h6>Get Your item first and Pay the merchant after</h6>
+      </div>
+
+      <div class="mb-5 input-group">
+        <form #form="ngForm">
+          <h6 class="label">Enter your phone number</h6>
+          <intl-tel-input
+            [name]="'userPhone'"
+            [cssClass]="'form-control'"
+            [labelCssClass]="'col-sm-2 col-form-label'"
+            [required]="true"
+            [options]="{
+              onlyCountries: ['gh', 'ng']
+            }"
+            [onlyLocalized]="true"
+          ></intl-tel-input>
+        </form>
+      </div>
+      <div id="button">
+        <button
+          type="button"
+          (click)="onProceed(form)"
+          class="btn btn-light btn-md"
+          [disabled]="isSendingCode"
+        >
+         {{ isSendingCode ? 'Sending OTP...' : 'Proceed' }}
+        </button>
+      </div>
+      <div
+        style="margin-top: 30px"
+        *ngIf="hasError"
+        class="alert alert-danger"
+        role="alert"
+      >
+        {{ errorMessage }}
+      </div>
+    </div>
+    <div class="secure">
+      <h6>
+        <span>
+          <mat-icon class="lock">lock</mat-icon>
+        </span>
+        Secured by Noworri
+      </h6>
+    </div>
+  </div>
+</section>

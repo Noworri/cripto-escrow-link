@@ -1,0 +1,195 @@
+#container {
+  .card {
+    width: 35rem;
+    overflow: hidden;
+  }
+  position: absolute;
+  left: 50%;
+  top: 70%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  .navbar {
+    background: #e3e8ee 0% 0% no-repeat padding-box;
+  }
+
+  .shopAvatar {
+    margin-left: -30px;
+    margin-top: 10px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+  }
+  .shopname {
+    margin-left: -10px;
+    h6 {
+      width: 150px;
+      letter-spacing: 0px;
+      color: #000000;
+      opacity: 1;
+      font-size: 15px;
+      margin-top: 20px;
+      margin-left: -30px;
+      font-weight: 600;
+    }
+  }
+  .card-body {
+    .profil {
+      display: flex;
+      justify-content: center;
+      img {
+        border-radius: 30px;
+      }
+    }
+    .message {
+      margin-top: 17px;
+      h6 {
+        text-align: center;
+        font-size: 16px;
+        font-weight: 400;
+      }
+      p {
+        margin-top: 20px;
+        text-align: center;
+        font-size: small;
+        letter-spacing: 0px;
+        color: #484848;
+      }
+    }
+  }
+  #data {
+    margin-top: 40px;
+    .row {
+    }
+    .total {
+      letter-spacing: 0px;
+      color: #4f4c4c;
+      opacity: 1;
+      font-size: 15px;
+      margin-left: 55px;
+    }
+    .artice {
+      text-align: left;
+      letter-spacing: 0px;
+      color: #4f4c4c;
+      opacity: 1;
+      font-size: 15px;
+    }
+  }
+  hr {
+    background-color: black;
+  }
+  #button {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    button {
+      background: #497dd5 0% 0% no-repeat;
+      letter-spacing: 0px;
+      color: #ffffff;
+      font-size: 14px;
+      opacity: 1;
+    }
+  }
+  .secure {
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+    span {
+      color: red;
+    }
+    h6 {
+      font-size: small;
+      letter-spacing: 0px;
+      color: #000000;
+      opacity: 1;
+    }
+  }
+  .lock {
+    margin-left: -17px;
+    font-size: 14px;
+    color: #2699fb;
+  }
+  .Securee {
+    margin-top: -27px;
+  }
+  .cancel4 {
+    font-size: 16px;
+    color: red;
+    cursor: pointer;
+  }
+  .total1 {
+    text-align: center;
+    margin-left: 40px;
+    letter-spacing: 0px;
+    color: #4f4c4c;
+    opacity: 1;
+    font-size: 15px;
+  }
+  .changeAdresse {
+  }
+
+  .changeButton {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 20px;
+    button {
+      background: #497dd5 0% 0% no-repeat;
+      letter-spacing: 0px;
+      color: #ffffff;
+      font-size: 14px;
+      opacity: 1;
+    }
+  }
+}
+@media (max-width: 575.98px) {
+  #container {
+    margin-top: -345px;
+    .shopAvatar {
+      margin-left: -30px;
+      margin-top: 10px;
+      img {
+        display: flex;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+      }
+    }
+    position: absolute;
+    left: 50%;
+    top: 120%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    .card {
+      width: 19rem;
+    }
+
+    #data {
+      margin-top: 40px;
+      .total {
+        letter-spacing: 0px;
+        color: #4f4c4c;
+        opacity: 1;
+        font-size: 15px;
+        margin-left: -20px;
+      }
+
+      .total1 {
+        letter-spacing: 0px;
+        color: #4f4c4c;
+        opacity: 1;
+        font-size: 15px;
+        margin-left: -20px;
+      }
+      .artice {
+        margin-left: -10px;
+        letter-spacing: 0px;
+        color: #4f4c4c;
+        opacity: 1;
+        font-size: 15px;
+      }
+    }
+  }
+}
