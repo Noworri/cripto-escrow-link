@@ -87,13 +87,14 @@ export class PayementsComponent implements OnInit {
     private transactionService: TransactionService,
     private activatedRoute: ActivatedRoute,
     private sanitizer: DomSanitizer
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // this.getUrlParams(window.location.href);
     this.getVendorUrlParams();
     this.getCryptoDetails();
     this.setFormValues();
+    console.log(this.form)
   }
 
   getVendorUrlParams() {
@@ -107,13 +108,13 @@ export class PayementsComponent implements OnInit {
 
   setFormValues() {
     this.form = this.formBuilder.group({
-      crypto_type: ['Bitcoin', Validators.required],
+      crypto_type: ['Bi', Validators.required],
       amount: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       crypto_wallet: ['', Validators.required],
-      rate: [
-        '',
-        [Validators.required, Validators.pattern(this.digitsValidationPattern)],
-      ],
+      // rate: [
+      //   '',
+      //   [Validators.required, Validators.pattern(this.digitsValidationPattern)],
+      // ],
     });
   }
 
@@ -122,8 +123,8 @@ export class PayementsComponent implements OnInit {
     return newAmount;
   }
 
-  getAmount(rate: any) {
-    const amount = this.form.value.amount * rate;
+  getAmount() {
+    const amount = this.form.value.amount * this.rate;
     this.netPayable = amount + this.getNoworriFee(amount);
   }
 
@@ -191,6 +192,8 @@ export class PayementsComponent implements OnInit {
         this.cryptoData = response['data'];
         this.setFormValues();
       });
+
+
   }
 
   displayVendorData() {
@@ -200,8 +203,8 @@ export class PayementsComponent implements OnInit {
       return post;
     });
     this.avatar =
-    this.sanitizer.bypassSecurityTrustHtml(this.vendorData?.avatar) ||
-    DEFAULT_AVATAR;
+      this.sanitizer.bypassSecurityTrustHtml(this.vendorData?.avatar) ||
+      DEFAULT_AVATAR;
   }
 
   getCryptoURL(name: string) {
@@ -235,6 +238,7 @@ export class PayementsComponent implements OnInit {
   // }
 
   onSelectCripto(criptoSelected: any) {
+    this.getSelectedCryptoRate(criptoSelected)
     if (this.criptoSelected == 'Select the crypto') {
       this.criptoWalletteName = 'BTC';
     } else {
@@ -242,13 +246,23 @@ export class PayementsComponent implements OnInit {
     }
   }
 
+
+
+  getSelectedCryptoRate(criptoSelected: any) {
+    const selected = this.vendorPosts.find((resu: any) => resu.crypto_type === criptoSelected);
+    this.rate = selected.rate;
+  }
+
+
+
+
   payWithNoworri() {
     this.validatePhoneNumber(this.form.value.phone_number);
   }
   setPaymentData() {
     const amount = this.getAmountInGHS(
       this.form.value.amount,
-      this.form.value.rate
+      this.rate
     );
     const data = {
       user_id: this.vendorData.user_id,
@@ -271,31 +285,7 @@ export class PayementsComponent implements OnInit {
       callback_url: window.location.href,
       cancel_url: window.location.href,
     };
-    this.processPayment(data);
-  }
-
-  processPayment(data: any) {
-    this.formValidationStatus.crypto_type =
-      this.form.value.crypto_type === 'Select the  crypto'
-        ? 'form-select is-invalid'
-        : 'form-select is-valid';
-    this.formValidationStatus.amount =
-      this.form.value.amount === ''
-        ? 'form-control is-invalid'
-        : 'form-control is-valid';
-    this.formValidationStatus.crypto_wallet =
-      this.form.value.crypto_wallet === ''
-        ? 'form-control is-invalid'
-        : 'form-control is-valid';
-
-    this.formValidationStatus.rate =
-      this.form.value.rate === ''
-        ? 'form-control is-invalid'
-        : 'form-control is-valid';
-
-    if (this.form.valid) {
-      sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
-      this.router.navigate(['checkout/phonenumber']);
-    }
+    sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
+    this.router.navigate(['checkout/phonenumber']);
   }
 }
