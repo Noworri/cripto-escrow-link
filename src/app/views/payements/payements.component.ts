@@ -227,12 +227,6 @@ export class PayementsComponent implements OnInit {
     }
   }
 
-  // getUrlParams(url: string) {
-  //   const params = new URL(url).searchParams;
-  //   this.vendorID = params.get('id');
-  //   this.getVendorDetails(this.vendorID);
-
-  // }
 
   onSelectCripto(criptoSelected: any) {
     this.getSelectedCryptoRate(criptoSelected)
