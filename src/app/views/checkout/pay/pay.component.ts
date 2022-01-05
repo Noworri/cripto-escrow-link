@@ -15,7 +15,14 @@ import { NgxUiLoaderService } from 'ngx-ui-loader';
 import { LOCAL_STORAGE_KEY_VENDOR_DATA } from '../../payements/payements.component';
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { PaymentData } from 'src/app/models/payment.interface';
-import { DEFAULT_AVATAR, ORDER_DATA_KEY, PAYMENT_DATA_KEY, TRANSACTION_DATA_KEY, USER_API_KEY, USER_DATA_KEY } from 'src/app/models/constants';
+import {
+  DEFAULT_AVATAR,
+  ORDER_DATA_KEY,
+  PAYMENT_DATA_KEY,
+  TRANSACTION_DATA_KEY,
+  USER_API_KEY,
+  USER_DATA_KEY,
+} from 'src/app/models/constants';
 
 @Component({
   selector: 'app-pay',
@@ -48,14 +55,20 @@ export class PayComponent implements OnInit, OnDestroy {
     private loader: NgxUiLoaderService,
     private sanitizer: DomSanitizer
   ) {
-
-    const transactionData = JSON.parse(sessionStorage.getItem(TRANSACTION_DATA_KEY) as string);
-    const userData = JSON.parse(sessionStorage.getItem(USER_DATA_KEY) as string);
+    const transactionData = JSON.parse(
+      sessionStorage.getItem(TRANSACTION_DATA_KEY) as string
+    );
+    const userData = JSON.parse(
+      sessionStorage.getItem(USER_DATA_KEY) as string
+    );
     const businessData = JSON.parse(
       sessionStorage.getItem(LOCAL_STORAGE_KEY_VENDOR_DATA) as string
     );
     const savedDataString = sessionStorage.getItem(ORDER_DATA_KEY);
-    const orderDataSaved = savedDataString !== 'undefined' ? JSON.parse(savedDataString as string) : undefined;
+    const orderDataSaved =
+      savedDataString !== 'undefined'
+        ? JSON.parse(savedDataString as string)
+        : undefined;
 
     this.savedOrderData = orderDataSaved;
     this.checkoutData = transactionData;
@@ -65,8 +78,10 @@ export class PayComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.avatar =
-      this.sanitizer.bypassSecurityTrustHtml(this.businessData?.avatar) || DEFAULT_AVATAR;
+    this.avatar = !!this.businessData?.avatar
+      ? this.sanitizer.bypassSecurityTrustHtml(this.businessData?.avatar) ||
+        DEFAULT_AVATAR
+      : DEFAULT_AVATAR;
     this.userPP =
       this.userData?.photo === null
         ? 'assets/checkout/profilPhotoAnimation.gif'
@@ -77,7 +92,7 @@ export class PayComponent implements OnInit, OnDestroy {
     //     ? 'assets/checkout/profilPhotoAnimation.gif'
     //     : `https://noworri.com/api/public/uploads/company/business/${this.businessData.business_logo}`;
 
-     this.getOrderData();
+    this.getOrderData();
 
     const url = window.location.href;
     this.getUrlParams(url);

@@ -62,10 +62,11 @@ export class PayementsComponent implements OnInit {
 
   unsubscribeAll$ = new Subject();
 
-  criptoSelected: any = 'B';
+  cryptoTypeSelected: any = '';
 
   criptoWalletteName = 'crypto';
   username: string | null = '';
+  requiredAmount: number = 0;
   vendorUsername: any;
   vendorData: any;
   vendorPosts: any;
@@ -78,6 +79,7 @@ export class PayementsComponent implements OnInit {
   cryptoData: any[] = [];
   digitsValidationPattern = /^[1-9]\d*(\.\d+)?$/;
   avatar: SafeHtml | undefined;
+  requiredAmountValue: number = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -107,13 +109,9 @@ export class PayementsComponent implements OnInit {
 
   setFormValues() {
     this.form = this.formBuilder.group({
-      crypto_type: ['Bitcoin', Validators.required],
+      crypto_type: ['', Validators.required],
       amount: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       crypto_wallet: ['', Validators.required],
-      rate: [
-        '',
-        [Validators.required, Validators.pattern(this.digitsValidationPattern)],
-      ],
     });
   }
 
@@ -199,9 +197,10 @@ export class PayementsComponent implements OnInit {
     this.vendorPosts = posts.map((post: any) => {
       return post;
     });
-    this.avatar =
-    this.sanitizer.bypassSecurityTrustHtml(this.vendorData?.avatar) ||
-    DEFAULT_AVATAR;
+    this.avatar = !!this.vendorData?.avatar
+      ? this.sanitizer.bypassSecurityTrustHtml(this.vendorData?.avatar) ||
+        DEFAULT_AVATAR
+      : DEFAULT_AVATAR;
   }
 
   getCryptoURL(name: string) {
@@ -234,11 +233,28 @@ export class PayementsComponent implements OnInit {
 
   // }
 
-  onSelectCripto(criptoSelected: any) {
-    if (this.criptoSelected == 'Select the crypto') {
+  onSelectCrypto(cryptoTypeSelected: any) {
+    if (this.cryptoTypeSelected == 'Select The Crypto') {
       this.criptoWalletteName = 'BTC';
     } else {
-      this.criptoWalletteName = criptoSelected;
+      this.criptoWalletteName = cryptoTypeSelected;
+      const selectedPost = this.vendorPosts.find(
+        (post: any) => post?.crypto?.name === cryptoTypeSelected
+      );
+      this.rate = selectedPost.rate;
+    }
+  }
+
+  onSetAmount(amount: number) {
+    this.requiredAmountValue = amount * this.rate;
+    this.netPayable = this.requiredAmountValue + this.getNoworriFee(amount);
+  }
+
+  getSign(percentage: any) {
+    if (parseFloat(percentage) > 0) {
+      return `+${percentage}`;
+    } else {
+      return percentage;
     }
   }
 
@@ -246,10 +262,7 @@ export class PayementsComponent implements OnInit {
     this.validatePhoneNumber(this.form.value.phone_number);
   }
   setPaymentData() {
-    const amount = this.getAmountInGHS(
-      this.form.value.amount,
-      this.form.value.rate
-    );
+    const amount = this.requiredAmountValue;
     const data = {
       user_id: this.vendorData.user_id,
       items: [
