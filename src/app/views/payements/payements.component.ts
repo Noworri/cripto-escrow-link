@@ -311,4 +311,11 @@ export class PayementsComponent implements OnInit {
       this.router.navigate(['checkout/phonenumber']);
     }
   }
+
+  getSelectedCryptoRate(criptoSelected: any) {
+    const selected = this.vendorPosts.find(
+      (resu: any) => resu.crypto_type === criptoSelected
+    );
+    this.rate = selected.rate;
+  }
 }
