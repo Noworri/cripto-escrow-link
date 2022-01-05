@@ -1,0 +1,82 @@
+<section id="container">
+  <div class="card" style="width: 25rem">
+    <mat-icon class="cancel" routerLink="">cancel</mat-icon>
+    <div class="img">
+      <img
+        src="../../../assets/checkout/logo transparence.png"
+        class="card-img-top"
+        alt="..."
+      />
+    </div>
+    <div class="card-body">
+      <div class="making">
+        <h6>Making payment with less of a hassle</h6>
+      </div>
+      <div id="input">
+        <div class="row">
+          <label for="exampleInputPassword1" class="form-label"
+            >Verify your phone number</label
+          >
+        </div>
+        <div class="row">
+          <ng-otp-input
+            (onInputChange)="onOtpChange($event)"
+            [config]="{ length: 5 }"
+          ></ng-otp-input>
+          <!-- <div class="col-2">
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              maxlength="1"
+              moveNextByMaxLength
+            />
+          </div>
+          <div class="col-2">
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              maxlength="1"
+            />
+          </div>
+          <div class="col-2">
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              maxlength="1"
+            />
+          </div>
+          <div class="col-2">
+            <input
+              type="password"
+              class="form-control"
+              id="exampleInputPassword1"
+              maxlength="1"
+            />
+          </div> -->
+        </div>
+        <div
+          style="margin-top: 30px"
+          *ngIf="hasError"
+          class="alert alert-danger"
+          role="alert"
+        >
+          {{ errorMessage }}
+        </div>
+      </div>
+
+      <div id="button">
+        <button type="button" (click)="onVerify()" class="btn btn-light btn-md">
+          Verify
+        </button>
+      </div>
+    </div>
+    <div class="secure">
+      <h6>
+        <span><mat-icon class="lock">lock</mat-icon></span> Secured by Noworri
+      </h6>
+    </div>
+  </div>
+</section>

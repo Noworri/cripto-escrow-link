@@ -1,0 +1,103 @@
+<section id="container">
+  <div class="card">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <div class="container-fluid">
+        <div class="container">
+          <div class="row">
+            <div class="col-6 shopAvatar">
+              <div class="card-img-top" [innerHTML]="avatar"></div>
+              <!-- <img src="{{businessLogo}}" class="card-img-top" alt="..." /> -->
+            </div>
+            <div class="col-6 shopname">
+              <h6>{{businessData.trading_name}}</h6>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+    <div *ngIf="hasParams && !hasError" class="card-body">
+      <div class="container">
+        <div class="text-center">
+          <div class="spinner-border" role="status">
+            <span class="sr-only">Redirecting...</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="!hasParams" class="card-body">
+      <div class="profil">
+        <!-- <div class="card-img-top" style="width: 60px; height: 60px" [innerHTML]="avatar"></div> -->
+        <img src="{{userPP}}" class="card-img-top" alt="..." style="width: 60px; height: 60px" />
+      </div>
+      <div class="message">
+        <h6>Hi {{ userData.first_name}} 👋🏿,</h6>
+        <div class="container">
+          <p>
+            Noworri is going to hold your cash you can log in into your Noworri
+            mobile account to release the cash once you get the product
+            delivered.
+          </p>
+        </div>
+      </div>
+
+      <div class="container" id="data">
+        <div class="row" *ngFor="let data of orderData; let itemIndex=index">
+          <div class="col-6">
+            <h6 class="artice">({{data.items_qty}}) {{data.name}}</h6>
+          </div>
+          <div class="col-4">
+            <h6 class="total1">{{data.price}} {{checkoutData.currency}}</h6>
+          </div>
+          <!-- <div class="col-2">
+            <mat-icon class="cancel4" (click)="removeItem(itemIndex)">cancel</mat-icon>
+          </div> -->
+        </div>
+        <hr />
+        <div class="row">
+          <div class="col-6">
+            <h6 class="artice">Total</h6>
+          </div>
+          <div class="col-6">
+            <h6 class="total tota">{{totalPrice}} {{checkoutData.currency}}</h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <h6 class="artice">Noworri fee</h6>
+          </div>
+          <div class="col-6">
+            <h6 class="total">{{getNoworriFee(totalPrice)}} {{checkoutData.currency}}</h6>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-6">
+            <h6 class="artice">Net Payable</h6>
+          </div>
+          <div class="col-6">
+            <h6 class="total">{{amount}} {{checkoutData.currency}}</h6>
+          </div>
+        </div>
+        <hr />
+      </div>
+    </div>
+    <div id="button">
+      <button *ngIf="!hasParams" type="button" (click)="onProceed()" class="btn btn-primary btn-md">
+        Proceed To Lock Up  {{amount}} {{checkoutData.currency}}
+      </button>
+      <div class="row">
+        <div *ngIf="hasError" class="alert alert-danger" role="alert">
+          {{ errorMessage }}
+        </div>
+      </div>
+    </div>
+
+    <div class="secure">
+      <h6>
+        <span>
+          <mat-icon class="lock">lock</mat-icon>
+        </span>
+        <h6 class="Securee">Secured by Noworri <span>&</span> Paystack</h6>
+      </h6>
+    </div>
+  </div>
+</section>
