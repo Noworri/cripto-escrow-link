@@ -64,8 +64,8 @@
                 <option selected disabled [value]="">
                   Select The Crypto
                 </option>
-                <option *ngFor="let selected of vendorPosts" [value]="selected.crypto.name">
-                  {{ selected.crypto.name }}
+                <option *ngFor="let selected of vendorPosts"  [value]="selected.crypto_type">
+                  {{ selected.crypto_type }}
                 </option>
               </select>
               <!-- <div  *ngIf="form.get('crypto_type')?.errors" class="alert alert-danger" role="alert">

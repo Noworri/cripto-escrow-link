@@ -234,6 +234,7 @@ export class PayementsComponent implements OnInit {
   // }
 
   onSelectCrypto(cryptoTypeSelected: any) {
+    this.getSelectedCryptoRate(cryptoTypeSelected)
     if (this.cryptoTypeSelected == 'Select The Crypto') {
       this.criptoWalletteName = 'BTC';
     } else {
