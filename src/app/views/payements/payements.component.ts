@@ -234,20 +234,22 @@ export class PayementsComponent implements OnInit {
   // }
 
   onSelectCrypto(cryptoTypeSelected: any) {
-    if (this.cryptoTypeSelected == 'Select The Crypto') {
-      this.criptoWalletteName = 'BTC';
-    } else {
-      this.criptoWalletteName = cryptoTypeSelected;
-      const selectedPost = this.vendorPosts.find(
-        (post: any) => post?.crypto?.name === cryptoTypeSelected
-      );
-      this.rate = selectedPost.rate;
-    }
+    this.getSelectedCryptoRate(cryptoTypeSelected)
+    // if (this.cryptoTypeSelected == 'Select The Crypto') {
+    //   this.criptoWalletteName = 'BTC';
+    // } else {
+    //   this.criptoWalletteName = cryptoTypeSelected;
+    //   const selectedPost = this.vendorPosts.find(
+    //     (post: any) => post?.crypto?.name === cryptoTypeSelected
+    //   );
+    //   this.rate = selectedPost.rate;
+    // }
   }
 
   onSetAmount(amount: number) {
     this.requiredAmountValue = amount * this.rate;
     this.netPayable = this.requiredAmountValue + this.getNoworriFee(amount);
+   
   }
 
   getSign(percentage: any) {
@@ -283,32 +285,40 @@ export class PayementsComponent implements OnInit {
       currency: 'GHS',
       callback_url: window.location.href,
       cancel_url: window.location.href,
+      rate:this.rate
     };
-    this.processPayment(data);
+    sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
+    this.router.navigate(['checkout/phonenumber']);
   }
 
-  processPayment(data: any) {
-    this.formValidationStatus.crypto_type =
-      this.form.value.crypto_type === 'Select the  crypto'
-        ? 'form-select is-invalid'
-        : 'form-select is-valid';
-    this.formValidationStatus.amount =
-      this.form.value.amount === ''
-        ? 'form-control is-invalid'
-        : 'form-control is-valid';
-    this.formValidationStatus.crypto_wallet =
-      this.form.value.crypto_wallet === ''
-        ? 'form-control is-invalid'
-        : 'form-control is-valid';
+  // processPayment(data: any) {
+  //   this.formValidationStatus.crypto_type =
+  //     this.form.value.crypto_type === 'Select the  crypto'
+  //       ? 'form-select is-invalid'
+  //       : 'form-select is-valid';
+  //   this.formValidationStatus.amount =
+  //     this.form.value.amount === ''
+  //       ? 'form-control is-invalid'
+  //       : 'form-control is-valid';
+  //   this.formValidationStatus.crypto_wallet =
+  //     this.form.value.crypto_wallet === ''
+  //       ? 'form-control is-invalid'
+  //       : 'form-control is-valid';
 
-    this.formValidationStatus.rate =
-      this.form.value.rate === ''
-        ? 'form-control is-invalid'
-        : 'form-control is-valid';
+  //   this.formValidationStatus.rate =
+  //     this.form.value.rate === ''
+  //       ? 'form-control is-invalid'
+  //       : 'form-control is-valid';
 
-    if (this.form.valid) {
-      sessionStorage.setItem(ORDER_DATA_KEY, JSON.stringify(data));
-      this.router.navigate(['checkout/phonenumber']);
-    }
+  //   if (this.form.valid) {
+    
+  //   }
+  // }
+
+  getSelectedCryptoRate(criptoSelected: any) {
+    const selected = this.vendorPosts.find(
+      (resu: any) => resu.crypto_type === criptoSelected
+    );
+    this.rate = selected.rate;
   }
 }
